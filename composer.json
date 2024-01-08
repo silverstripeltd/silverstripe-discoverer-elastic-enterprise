@@ -1,48 +1,44 @@
 {
-    "name": "silverstripeltd/silverstripe-elasticappsearch",
-    "description": "Connector module for querying Elastic App Search from SilverStripe CMS",
+    "name": "silverstripeltd/silverstripe-search",
+    "description": "Service agnostic abstraction of search querying requirements",
     "type": "silverstripe-vendormodule",
     "license": "proprietary",
-    "homepage": "https://github.com/silverstripeltd/silverstripe-elasticappsearch",
-    "authors": [
-        {
-            "name": "madmatt",
-            "homepage": "https://github.com/madmatt"
-        }
-    ],
+    "homepage": "https://github.com/silverstripeltd/silverstripe-search",
+    "authors": [],
     "keywords": [
-        "SilverStripe",
-        "SilverStripe CMS",
-        "Elastic",
-        "Elastic App Search"
+        "Silverstripe",
+        "Silverstripe CMS",
+        "Search"
     ],
     "require": {
         "php": "^8.1",
-        "elastic/enterprise-search": "^8.7",
-        "silverstripe/framework": "^5",
-        "psr/log" : "^3"
+        "silverstripe/framework": "^5"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3",
-        "mockery/mockery": "^1.6.5",
         "phpunit/phpunit": "^9.5",
-        "phpcompatibility/php-compatibility": "^9.3"
+        "silverstripeltd/bespoke-standards": "^1.2"
     },
     "autoload": {
         "psr-4": {
-            "SilverStripe\\ElasticAppSearch\\": "silverstripe-elasticappsearch/src"
+            "Silverstripe\\Search\\": "src/",
+            "Silverstripe\\Search\\Tests\\": "tests/"
         }
     },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
             "silverstripe/vendor-plugin": true,
-            "php-http/discovery": true
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
-        "phpcs": "phpcs app --ignore=app/src/App/Tasks/*,app/client/node_modules/* --standard=phpcs.xml --extensions=php --encoding=utf-8",
-        "phpcbf": "phpcbf app --ignore=app/src/App/Tasks/*,app/client/node_modules/* --standard=phpcs.xml --extensions=php --encoding=utf-8",
-        "php-compatible": "phpcs -p src --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.2"
+        "silverstripe-standards": [
+            "@php-lint",
+            "@phpcs"
+        ],
+        "php-lint": "bespoke-phplint",
+        "phpcs": "bespoke-phpcs",
+        "phpcbf": "bespoke-phpcbf",
+        "phpcs-fix": "@phpcbf"
     }
 }
