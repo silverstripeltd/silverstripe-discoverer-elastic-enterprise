@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Query;
+namespace SilverStripe\SearchElastic\Query;
 
 use Psr\Log\LoggerInterface;
 use SilverStripe\Core\Injector\Injectable;

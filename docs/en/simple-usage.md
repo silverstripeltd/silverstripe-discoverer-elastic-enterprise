@@ -46,18 +46,7 @@ class SearchResults extends Page
 
 namespace App\Pages;
 
-use PageController;
-use Psr\Log\LoggerInterface;
-use SilverStripe\Core\Convert;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
-use SilverStripe\ElasticAppSearch\Service\AppSearchService;
-use SilverStripe\ElasticAppSearch\Service\SearchResult;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\Form;
-use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\TextField;
-use Throwable;
+use PageController;use Psr\Log\LoggerInterface;use SilverStripe\Core\Convert;use SilverStripe\Core\Injector\Injector;use SilverStripe\Forms\FieldList;use SilverStripe\Forms\Form;use SilverStripe\Forms\FormAction;use SilverStripe\Forms\TextField;use SilverStripe\SearchElastic\Query\SearchQuery;use SilverStripe\SearchElastic\Service\AppSearchService;use SilverStripe\SearchElastic\Service\SearchResult;use Throwable;
 
 class SearchResultsController extends PageController
 {

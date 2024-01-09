@@ -4,8 +4,8 @@ namespace SilverStripe\ElasticAppSearch\Tests\Service;
 
 use InvalidArgumentException;
 use LogicException;
-use SilverStripe\ElasticAppSearch\Service\SearchResult;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\SearchElastic\Service\SearchResult;
 
 class SearchResultTest extends SapphireTest
 {

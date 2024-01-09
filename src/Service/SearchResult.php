@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Service;
+namespace SilverStripe\SearchElastic\Service;
 
 use Exception;
 use InvalidArgumentException;
@@ -8,11 +8,11 @@ use LogicException;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\ElasticAppSearch\Controller\ClickthroughController;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\PaginatedList;
+use SilverStripe\SearchElastic\Controller\ClickthroughController;
 use SilverStripe\Security\Security;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;

@@ -3,9 +3,9 @@
 namespace SilverStripe\ElasticAppSearch\Tests\Query;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\SearchElastic\Query\SearchQuery;
 
 class SearchQueryTest extends SapphireTest
 {

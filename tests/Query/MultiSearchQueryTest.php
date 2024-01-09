@@ -3,10 +3,10 @@
 namespace SilverStripe\ElasticAppSearch\Tests\Query;
 
 use Elastic\OpenApi\Codegen\Serializer\SmartSerializer;
-use SilverStripe\ElasticAppSearch\Query\MultiSearchQuery;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\SearchElastic\Query\MultiSearchQuery;
+use SilverStripe\SearchElastic\Query\SearchQuery;
 
 class MultiSearchQueryTest extends SapphireTest
 {

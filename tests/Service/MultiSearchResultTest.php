@@ -2,14 +2,14 @@
 
 namespace SilverStripe\ElasticAppSearch\Tests\Service;
 
-use SilverStripe\ElasticAppSearch\Query\MultiSearchQuery;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
-use SilverStripe\ElasticAppSearch\Service\MultiSearchResult;
-use SilverStripe\ElasticAppSearch\Service\SearchResult;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\PaginatedList;
+use SilverStripe\SearchElastic\Query\MultiSearchQuery;
+use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\SearchElastic\Service\MultiSearchResult;
+use SilverStripe\SearchElastic\Service\SearchResult;
 
 class MultiSearchResultTest extends SapphireTest
 {

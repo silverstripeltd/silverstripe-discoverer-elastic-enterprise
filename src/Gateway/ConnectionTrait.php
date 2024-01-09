@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Gateway;
+namespace SilverStripe\SearchElastic\Gateway;
 
 use Elastic\EnterpriseSearch\AbstractEndpoints;
 use Elastic\EnterpriseSearch\AppSearch;

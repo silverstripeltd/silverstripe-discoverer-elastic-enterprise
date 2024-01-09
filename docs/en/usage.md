@@ -35,8 +35,7 @@ For an overview of how to use the classes, see [simple-usage.md](simple-usage.md
 Specify the keyword (or words) you want to search for using `$query->setQuery('search keywords')`. Subsequent calls to this method will override older values.
 
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $query = Injector::inst()->get(SearchQuery::class);
 $query->setQuery('keywords to search for');
@@ -46,8 +45,7 @@ $query->setQuery('keywords to search for');
 You can specify raw App Search filters through to `SearchQuery` using the `addRawFilters()` method. For now, these should be passed in the exact way that the [elastic/app-search-php module expects](https://swiftype.com/documentation/app-search/api/search/filters). An example of this is below:
 
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $filters = new stdClass;
 
@@ -79,9 +77,9 @@ You can return this metadata alongside your results by adding raw App Search fac
 ![facet-results.png](images/facet-results.png)
 
 Here's how you can achieve something like this, using taxonomy terms as an example:
+
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $facets = new stdClass();
 
@@ -120,8 +118,7 @@ You can use these values in templates:
 [Result Fields](https://swiftype.com/documentation/app-search/api/search/result-fields) are convenient ways to ask Elastic to return contextual information on why a document was returned in search results. This is often known as 'context highlighting' or 'excerpt content'. For example, a search for `test` would return the following result field for the page title if requested: `This is a <em>test</em> page`.
 
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 // Request an HTML snippet of an indexed field, with an optional maximum character length (default 100, range between 20 and 1000 characters)
 $query = Injector::inst()->get(SearchQuery::class);
@@ -155,9 +152,9 @@ You can optionally specify a weighting to give the text field you want to search
 **Note:** Defining weights for any search field overrides **all** weights as defined in the Elastic App Search console - leading to customer confusion.
 
 The below example will ensure the quey only searches the `title` and `content` fields.
+
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $query = Injector::inst()->get(SearchQuery::class);
 $query->addSearchField('content'); // Don't specify a weight for content, the default will be used
@@ -169,8 +166,7 @@ $query->addSearchField('title', 10); // Make title the most relevant field
 The default sort is `_score`, which is essentially relevance. You can add one or more sorts to help organise your results via the `SearchQuery` class:
 
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $query = Injector::inst()->get(SearchQuery::class);
 // For a single sort, just pass the field and direction to addSort()
@@ -236,8 +232,7 @@ By default, this module automatically handles the pagination of results for you,
 **Note:** Page numbers in Elastic App Search are a one-based index (e.g. starting at 1). The Silverstripe CMS `PaginatedList` class is a zero-based index (starting at `0`). If you don't use the built-in pagination settings, you will need to account for this (e.g. by incrementing `$currentPageNum` when calling `setPagination`).
 
 ```php
-use SilverStripe\Core\Injector\Injector,
-    SilverStripe\ElasticAppSearch\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 // Below will result in Elastic returning results 81 - 100
 $query = Injector::inst()->get(SearchQuery::class);

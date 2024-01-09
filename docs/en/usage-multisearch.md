@@ -24,12 +24,7 @@ result for the keyword. In this way, I can link to the "file" section if I detec
 results there.
 
 ```php
-use SilverStripe\ElasticAppSearch\Query\MultiSearchQuery;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
-use SilverStripe\ElasticAppSearch\Service\AppSearchService;
-use Psr\Log\LoggerInterface;
-use SilverStripe\Core\Injector\Injector;
-use stdClass;
+use Psr\Log\LoggerInterface;use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\MultiSearchQuery;use SilverStripe\SearchElastic\Query\SearchQuery;use SilverStripe\SearchElastic\Service\AppSearchService;
 
 /*...*/
 

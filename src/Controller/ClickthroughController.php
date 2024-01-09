@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Controller;
+namespace SilverStripe\SearchElastic\Controller;
 
 use Exception;
 use LogicException;
@@ -11,8 +11,8 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ElasticAppSearch\Gateway\AppSearchGateway;
-use SilverStripe\ElasticAppSearch\Service\AppSearchService;
+use SilverStripe\SearchElastic\Gateway\AppSearchGateway;
+use SilverStripe\SearchElastic\Service\AppSearchService;
 use stdClass;
 
 class ClickthroughController extends Controller

@@ -1,19 +1,20 @@
 {
-    "name": "silverstripeltd/silverstripe-search",
-    "description": "Service agnostic abstraction of search querying requirements",
+    "name": "silverstripeltd/silverstripe-search-elastic",
+    "description": "A plugin module for silverstripeltd/silverstripe-search that provides integration for Elastic",
     "type": "silverstripe-vendormodule",
     "license": "proprietary",
-    "homepage": "https://github.com/silverstripeltd/silverstripe-search",
+    "homepage": "https://github.com/silverstripeltd/silverstripe-search-elastic",
     "authors": [],
     "keywords": [
         "Silverstripe",
         "Silverstripe CMS",
-        "Search"
+        "Search",
+        "Elastic",
+        "Elastic Search"
     ],
     "require": {
         "php": "^8.1",
-        "silverstripe/framework": "^5",
-        "silverstripeltd/silverstripe-search-elastic": "dev-main"
+        "silverstripe/framework": "^5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -21,8 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Silverstripe\\Search\\": "src/",
-            "Silverstripe\\Search\\Tests\\": "tests/"
+            "SilverStripe\\SearchElastic\\": "src/",
+            "SilverStripe\\SearchElastic\\Tests\\": "tests/"
         }
     },
     "config": {
@@ -43,3 +44,4 @@
         "phpcs-fix": "@phpcbf"
     }
 }
+

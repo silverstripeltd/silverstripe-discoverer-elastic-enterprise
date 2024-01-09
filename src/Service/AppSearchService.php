@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Service;
+namespace SilverStripe\SearchElastic\Service;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\MultiSearchData;
 use Exception;
@@ -10,10 +10,10 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\ElasticAppSearch\Gateway\AppSearchGateway;
-use SilverStripe\ElasticAppSearch\Query\MultiSearchQuery;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\SearchElastic\Gateway\AppSearchGateway;
+use SilverStripe\SearchElastic\Query\MultiSearchQuery;
+use SilverStripe\SearchElastic\Query\SearchQuery;
 
 class AppSearchService
 {

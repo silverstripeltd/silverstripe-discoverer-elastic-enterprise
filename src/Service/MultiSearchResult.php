@@ -1,12 +1,12 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Service;
+namespace SilverStripe\SearchElastic\Service;
 
 use Elastic\EnterpriseSearch\Response\Response;
 use InvalidArgumentException;
 use LogicException;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\ElasticAppSearch\Query\MultiSearchQuery;
+use SilverStripe\SearchElastic\Query\MultiSearchQuery;
 use SilverStripe\View\ViewableData;
 
 class MultiSearchResult extends ViewableData

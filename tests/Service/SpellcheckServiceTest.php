@@ -2,18 +2,18 @@
 
 namespace SilverStripe\ElasticAppSearch\Tests\Service;
 
+use Elastic\EnterpriseSearch\AppSearch\Schema;
 use Elastic\EnterpriseSearch\Response\Response;
+use GuzzleHttp\Psr7;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ElasticAppSearch\Gateway\AppSearchGateway;
-use SilverStripe\ElasticAppSearch\Query\SearchQuery;
-use SilverStripe\ElasticAppSearch\Service\AppSearchService;
-use SilverStripe\ElasticAppSearch\Service\SpellcheckService;
 use SilverStripe\ORM\ArrayList;
-use Elastic\EnterpriseSearch\AppSearch\Schema;
-use GuzzleHttp\Psr7;
+use SilverStripe\SearchElastic\Gateway\AppSearchGateway;
+use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\SearchElastic\Service\AppSearchService;
+use SilverStripe\SearchElastic\Service\SpellcheckService;
 
 class SpellcheckServiceTest extends SapphireTest
 {
