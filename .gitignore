@@ -1,6 +1,5 @@
 /composer.lock
 /resources
-/silverstripe-elasticappsearch
 /vendor
 .phpunit.result.cache
 .env
