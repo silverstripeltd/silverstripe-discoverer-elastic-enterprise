@@ -93,7 +93,7 @@ class SearchResultsController extends PageController
 
             $query = SearchQuery::create();
 
-            $query->setQuery($keywords);
+            $query->setQueryString($keywords);
             // Assumes you have a 'title' field in your schema - see below
             $query->addResultField('title', 'snippet', 20);
 

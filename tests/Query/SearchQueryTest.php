@@ -13,8 +13,8 @@ class SearchQueryTest extends SapphireTest
     {
         /** @var SearchQuery $searchQuery */
         $searchQuery = Injector::inst()->create(SearchQuery::class);
-        $searchQuery->setQuery('foo');
-        $this->assertEquals('foo', $searchQuery->getQuery());
+        $searchQuery->setQueryString('foo');
+        $this->assertEquals('foo', $searchQuery->getQueryString());
     }
 
     public function testSort(): void

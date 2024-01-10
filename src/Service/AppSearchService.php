@@ -53,9 +53,7 @@ class AppSearchService
     private static int $pagination_size = 10;
 
     /**
-     * @var bool Enable spellchecking of keywords when zero results are returned. Used in conjunction with YML config
-     *           flag "SearchQuery.enable_typo_tolerance = false". See the 'Spelling suggestions' section of the README for more
-     *           details.
+     * @var bool Enable spellchecking of keywords when zero results are returned
      */
     private static bool $enable_spellcheck_on_zero_results = false;
 
@@ -96,7 +94,7 @@ class AppSearchService
         $this->extend('augmentSearchResultsPreValidation', $response);
 
         // Create the new SearchResult object in which to store results, including validating the response
-        $result = SearchResult::create($query->getQuery(), $response);
+        $result = SearchResult::create($query->getQueryString(), $response);
         $result->setEngineName($engineName);
 
         // If we want to inject spelling suggestions, do so

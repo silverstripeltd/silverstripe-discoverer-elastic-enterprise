@@ -7,14 +7,7 @@ If you want spellcheck (e.g. "Did you mean"), then you'll need to make some chan
 
 We recommend that you only run a spelling suggestion when you get zero results for a specific query (as it's impossible to tell the difference between helpful and unhelpful results when typo tolerance is enabled).
 
-To do this, you can simply use the following YML fragment. If you don't do this, you are more likely to get _some_ results returned, which means your spelling suggestions will be less useful.
-
-```yml
-SilverStripe\ElasticAppSearch\Query\SearchQuery:
-    enable_typo_tolerance: false
-```
-
-Next, we want to enable querying of the underlying Elasticsearch datastore whenever no search results are found. This can be done automatically when calling `AppSearchService->query()`, or it can be done manually in your own code. Either way, we first require three environment variables to be configured:
+We want to enable querying of the underlying Elasticsearch datastore whenever no search results are found. This can be done automatically when calling `AppSearchService->query()`, or it can be done manually in your own code. Either way, we first require three environment variables to be configured:
 ```dotenv
 # The Cloud ID from the Elastic Cloud console. This should start with the name of the deployment, then a colon (:), then a base64-encoded string.
 # Example: test-deployment:c29tZS11cmwtdG8tZWxhc3RpY3NlYXJjaC5leGFtcGxlLmNvbSRyYW5kb20tdXVpZC1zdHJpbmctMSRyYW5kb20tdXVpZC1zdHJpbmctMg==
@@ -40,17 +33,17 @@ Next, you can enable automatic spellcheck when zero results are returned. Alongs
 SilverStripe\ElasticAppSearch\Service\AppSearchService:
     # Enable spellchecking by default when zero results are returned by Elastic App Search.
     enable_spellcheck_on_zero_results: true
-    
+
     # Sets the index variant value. If using the silverstripe-search-service module, this must be the same as what you use for that (e.g. `ENTERPRISE_SEARCH_ENGINE_PREFIX` or `APP_SEARCH_ENGINE_PREFIX`)
     index_variant: '`SS_ENVIRONMENT_TYPE`'
 
 SilverStripe\ElasticAppSearch\Service\SpellcheckService:
     # Set the maximum number of spelling suggestions to return. Elasticsearch may return less than this, but if it returns more than only the top N suggestions will be provided to the SearchResult.
     max_spellcheck_suggestions: 2
-    
+
     # Provide the GET query param that needs to be changed when creating links to other spelling suggestions
     query_param: q
-    
+
     # The engine/index and field map for each Elastic App Search you want to provide spellchecking for, where:
     # - engine_name is the name of the engine (don't include the environment variable part - e.g. just use "content" if your engine name is actually "dev-content"
     # - internal_index_name is the internal name of the index within Elasticsearch. This typically starts with .ent-search-engine- and then a random SHA.

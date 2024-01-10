@@ -8,17 +8,15 @@ use Elastic\EnterpriseSearch\AppSearch\Schema\SearchRequestParams;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Search\Query\Facet;
+use SilverStripe\Search\Query\Filter;
+use SilverStripe\Search\Query\Query;
 use stdClass;
 
-class SearchQuery
+class SearchQuery extends Query
 {
     use Configurable;
     use Injectable;
-
-    /**
-     * @var bool Set to `false` to disable typo tolerance (which will force exact matches for every individual keyword)
-     */
-    private static bool $enable_typo_tolerance = true;
 
     private string $query = '';
 
@@ -38,10 +36,9 @@ class SearchQuery
 
     /**
      * Set the query string that all documents must match in order to be returned. This can be set to an empty string to
-     * return all documents. This can be useful for example when you want to return all documents that match a
-     * particular filter.
+     * return all documents
      */
-    public function setQuery(string $query): self
+    public function setQueryString(string $query): self
     {
         $this->query = $query;
 
@@ -49,105 +46,11 @@ class SearchQuery
     }
 
     /**
-     * The query string set on this query.
+     * The query string set on this query
      */
-    public function getQuery(): string
+    public function getQueryString(): ?string
     {
         return $this->query;
-    }
-
-    /**
-     * If typo tolerance is disabled, then we sanitise and transform the keywords searched for into an AND search by
-     * default. If the user has already used some Lucene syntax, then we assume they know what they are doing. This will
-     * (for example) prefix every keyword with '+', and remove any keywords that are considered stopwords by
-     * Elasticsearch (e.g. 'and', 'or').
-     *
-     * @see https://swiftype.com/documentation/app-search/api/search#search-queries
-     *
-     * @return string the query string that Elastic should be sent
-     */
-    public function getQueryForElastic(): string
-    {
-        // If typo tolerance is enabled, just return the original query as-is with no modification
-        if ($this->config()->get('enable_typo_tolerance')) {
-            return $this->query;
-        }
-
-        // Typo tolerance is disabled, so we need to adjust the query
-        $keywordString = $this->query;
-
-        if (empty($keywordString)) {
-            return '';
-        }
-
-        $keywordString = rtrim($keywordString);
-        $keywordStringWithANDs = '';
-
-        // Don't hack it together if they are doing advanced manoeuvres already
-        $luceneOperators = ['AND', 'OR', 'NOT', '"'];
-
-        foreach ($luceneOperators as $luceneOperator) {
-            if (mb_strpos($keywordString, $luceneOperator) !== false) {
-                return $keywordString;
-            }
-        }
-
-        // Source: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stop-tokenfilter.html#analysis-stop-tokenfilter-stop-words-by-lang
-        // @todo: Assumption here that stopwords are all in English
-        $englishStopWords = [
-            'a', 'an', 'and', 'are', 'as', 'at', 'be', 'but', 'by', 'for', 'if', 'in', 'into', 'is',
-            'it', 'no', 'not', 'of', 'on', 'or', 'such', 'that', 'the', 'their', 'then', 'there',
-            'these', 'they', 'this', 'to', 'was', 'will', 'with',
-        ];
-
-        foreach (explode(' ', $keywordString) as $keyword) {
-            $prefix = '+';
-
-            // Check again for individual word manipulations
-            if ($keyword[0] === '+' || $keyword[0] === '-') {
-                $prefix = '';
-            }
-
-            // Requiring a stopword to be present _always_ returns zero results
-            // Remove punctuation so that we catch 'No.' being used for number, for example
-            if (in_array(preg_replace('/[^a-z0-9]/', '', mb_strtolower($keyword)), $englishStopWords)) {
-                $prefix = '';
-            }
-
-            // Check there's at least a letter or a number, otherwise requiring just a punctuation mark (e.g. |) breaks
-            if (preg_match('/[A-Za-z]/', $keyword) === 0 && preg_match('/[0-9]/', $keyword) === 0) {
-                $prefix = '';
-            }
-
-            $keywordStringWithANDs .= "{$prefix}{$keyword} ";
-        }
-
-        return rtrim($keywordStringWithANDs, ' ');
-    }
-
-    /**
-     * Sets the raw 'filters' attribute for filtering results. For more information on how to create filters, consult
-     * the Elastic App Search documentation: https://www.elastic.co/guide/en/app-search/current/filters.html.
-     *
-     * @todo It would be nice to allow for PHP-built filters (e.g. built from objects rather than needing the developer
-     * to figure out how Elastic's 'filters' key works) but that's a feature for a later date.
-     */
-    public function addRawFilters(SimpleObject $filters): self
-    {
-        $this->rawFilters = $filters;
-
-        return $this;
-    }
-
-    /**
-     * Sets the raw 'facets' attribute for returning metadata related to the search query. See the docs for help:
-     * https://swiftype.com/documentation/app-search/api/search/facets.
-     */
-    public function addRawFacets(SimpleObject $facets): self
-    {
-        $this->rawFacets = $facets;
-
-        return $this;
     }
 
     /**
@@ -181,7 +84,38 @@ class SearchQuery
         return $this;
     }
 
-    public function addResultField(string $field, string $type = 'raw', int $size = 0)
+    /**
+     * Sets the raw 'filters' attribute for filtering results. For more information on how to create filters, consult
+     * the Elastic App Search documentation: https://www.elastic.co/guide/en/app-search/current/filters.html.
+     *
+     * @todo It would be nice to allow for PHP-built filters (e.g. built from objects rather than needing the developer
+     * to figure out how Elastic's 'filters' key works) but that's a feature for a later date.
+     */
+    public function addRawFilters(SimpleObject $filters): self
+    {
+        $this->rawFilters = $filters;
+
+        return $this;
+    }
+
+    /**
+     * Sets the raw 'facets' attribute for returning metadata related to the search query. See the docs for help:
+     * https://swiftype.com/documentation/app-search/api/search/facets.
+     */
+    public function addRawFacets(SimpleObject $facets): self
+    {
+        $this->rawFacets = $facets;
+
+        return $this;
+    }
+
+    public function setFacets(array $facet): self
+    {
+        // TODO: Implement addFacet() method.
+        return $this;
+    }
+
+    public function addResultField(string $field, string $type = 'raw', int $size = 0): self
     {
         if (!isset($this->resultFields)) {
             $this->resultFields = [];
@@ -195,7 +129,7 @@ class SearchQuery
         return $this;
     }
 
-    public function addSearchField(string $field, int $weight = 0)
+    public function addSearchField(string $field, int $weight = 0): self
     {
         if (!isset($this->searchFields)) {
             $this->searchFields = [];
@@ -206,12 +140,39 @@ class SearchQuery
         return $this;
     }
 
+    public function setPageSize(int $pageSize): self
+    {
+        $this->pageSize = $pageSize;
+
+        return $this;
+    }
+
+    public function setPageNum(int $pageNum): self
+    {
+        $this->pageNum = $pageNum;
+
+        return $this;
+    }
+
+    public function setPagination(int $pageSize, int $pageNum): self
+    {
+        $this->pageSize = $pageSize;
+        $this->pageNum = $pageNum;
+
+        return $this;
+    }
+
+    public function hasPagination(): bool
+    {
+        return isset($this->pageNum) || isset($this->pageSize);
+    }
+
     /**
      * Returns the string representation of the search params of this query, ready for sending to Elastic.
      */
     public function getSearchParams(): SearchRequestParams
     {
-        $query = new SearchRequestParams($this->getQuery());
+        $query = new SearchRequestParams($this->getQueryString());
 
         if (isset($this->rawFilters)) {
             $query->filters = $this->rawFilters;
@@ -240,18 +201,7 @@ class SearchQuery
         return $query;
     }
 
-    public function hasPagination()
-    {
-        return isset($this->pageNum) || isset($this->pageSize);
-    }
-
-    public function setPagination(int $pageSize, int $pageNum)
-    {
-        $this->pageSize = $pageSize;
-        $this->pageNum = $pageNum;
-    }
-
-    public function getSortForRequest(): ?array
+    private function getSortForRequest(): ?array
     {
         if (!isset($this->sort)) {
             return null;

@@ -17,7 +17,7 @@ class MultiSearchQueryTest extends SapphireTest
 
         /** @var SearchQuery $fooQuery */
         $fooQuery = Injector::inst()->create(SearchQuery::class);
-        $fooQuery->setQuery('foo');
+        $fooQuery->setQueryString('foo');
 
         $multisearchQuery->addQuery($fooQuery);
 
@@ -25,7 +25,7 @@ class MultiSearchQueryTest extends SapphireTest
 
         /** @var SearchQuery $barQuery */
         $barQuery = Injector::inst()->create(SearchQuery::class);
-        $barQuery->setQuery('bar');
+        $barQuery->setQueryString('bar');
 
         $multisearchQuery->addQuery($barQuery);
 
@@ -39,11 +39,11 @@ class MultiSearchQueryTest extends SapphireTest
         $multisearchQuery = Injector::inst()->create(MultiSearchQuery::class);
 
         $fooQuery = Injector::inst()->create(SearchQuery::class);
-        $fooQuery->setQuery('foo');
+        $fooQuery->setQueryString('foo');
 
         /** @var SearchQuery $barQuery */
         $barQuery = Injector::inst()->create(SearchQuery::class);
-        $barQuery->setQuery('bar');
+        $barQuery->setQueryString('bar');
 
         $multisearchQuery->setQueries([$fooQuery, $barQuery]);
 
@@ -65,11 +65,11 @@ class MultiSearchQueryTest extends SapphireTest
 
         /** @var SearchQuery $fooQuery */
         $fooQuery = Injector::inst()->create(SearchQuery::class);
-        $fooQuery->setQuery('foo');
+        $fooQuery->setQueryString('foo');
 
         /** @var SearchQuery $barQuery */
         $barQuery = Injector::inst()->create(SearchQuery::class);
-        $barQuery->setQuery('bar');
+        $barQuery->setQueryString('bar');
         $barQuery->addSorts(
             [
                 'baz' => 'desc',

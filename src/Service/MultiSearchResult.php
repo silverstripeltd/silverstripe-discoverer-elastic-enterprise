@@ -81,7 +81,7 @@ class MultiSearchResult extends ViewableData
         // characteristics on the result that we can match across
         foreach ($response as $index => $singleResponse) {
             /** @var Response $singleResponse */
-            $singleResult = SearchResult::create($queries[$index]->getQuery(), $singleResponse, true);
+            $singleResult = SearchResult::create($queries[$index]->getQueryString(), $singleResponse, true);
             $this->addResult($singleResult);
         }
     }

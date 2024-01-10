@@ -1,5 +1,5 @@
 ---
-Name: elasticappsearch
+Name: search-elastic-config
 ---
 SilverStripe\ElasticAppSearch\Service\AppSearchService:
   # Sets the index variant value. If using the silverstripe-search-service module, this must be the same as what you use for that (e.g. `ENTERPRISE_SEARCH_ENGINE_PREFIX` or `APP_SEARCH_ENGINE_PREFIX`)

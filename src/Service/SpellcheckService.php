@@ -98,7 +98,7 @@ class SpellcheckService
         } catch (Exception $e) {
             // Soft-fail - log the error but do not fail the entire request
             $this->logger->error(
-                sprintf("Couldn't find spelling suggestions for %s: %s", $query->getQuery(), $e->getMessage())
+                sprintf("Couldn't find spelling suggestions for %s: %s", $query->getQueryString(), $e->getMessage())
             );
         }
 
@@ -131,7 +131,7 @@ class SpellcheckService
 
         // Setup request for query suggestion. Only query is required.
         $suggestRequest = new QuerySuggestionRequest();
-        $suggestRequest->query = mb_strtolower($query->getQuery());
+        $suggestRequest->query = mb_strtolower($query->getQueryString());
 
         // Set max suggestion to return if defined.
         if ($size) {

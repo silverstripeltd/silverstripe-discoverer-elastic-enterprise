@@ -31,7 +31,7 @@ use Psr\Log\LoggerInterface;use SilverStripe\Core\Injector\Injector;use SilverSt
 $service = AppSearchService::create();
 
 $keywordQuery = SearchQuery::create();
-$keywordQuery->setQuery('biscuits');
+$keywordQuery->setQueryString('biscuits');
 
 $keywordFilters = new stdClass();
 $keywordFilters->all = [];
@@ -39,7 +39,7 @@ $keywordFilters->all[] = (object) ['content_type' => ['page']];
 $keywordQuery->addRawFilters($keywordFilters);
 
 $contentTypeQuery = SearchQuery::create();
-$contentTypeQuery->setQuery('biscuits');
+$contentTypeQuery->setQueryString('biscuits');
 $contentTypeQuery->setPagination(0, 1);
 
 $facets = new stdClass();

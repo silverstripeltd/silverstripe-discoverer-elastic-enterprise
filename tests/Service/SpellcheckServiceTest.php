@@ -20,7 +20,7 @@ class SpellcheckServiceTest extends SapphireTest
     public function testGetSpellingSuggestions(): void
     {
         $query = new SearchQuery();
-        $query->setQuery('originalWord1 originalWord2');
+        $query->setQueryString('originalWord1 originalWord2');
         $engineName = 'test';
 
         $request = new HTTPRequest('GET', '/search', ['q' => 'originalWord1 originalWord2']);

@@ -1,5 +1,5 @@
 ---
-Name: elasticappsearch-analytics
+Name: search-elastic-analytics
 After: '#rootroutes'
 ---
 SilverStripe\ElasticAppSearch\Service\SearchResult:

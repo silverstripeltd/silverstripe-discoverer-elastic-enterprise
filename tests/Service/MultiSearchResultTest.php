@@ -20,7 +20,7 @@ class MultiSearchResultTest extends SapphireTest
 
         /** @var SearchQuery $fooQuery */
         $fooQuery = Injector::inst()->create(SearchQuery::class);
-        $fooQuery->setQuery('foo');
+        $fooQuery->setQueryString('foo');
         $multisearchQuery->addQuery($fooQuery);
 
         $result = new MultiSearchResult($multisearchQuery, [
