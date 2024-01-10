@@ -2,9 +2,12 @@
 
 namespace SilverStripe\ElasticAppSearch\Tests\Filter;
 
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Search\Filter\Criterion;
 use SilverStripe\SearchElastic\Filter\CriterionAdaptor;
+use SilverStripe\Search\Filter\CriterionAdaptor as CriterionAdaptorInterface;
 
 class CriterionAdaptorTest extends SapphireTest
 {
@@ -27,8 +30,24 @@ class CriterionAdaptorTest extends SapphireTest
     public function provideBasicComparisons(): array
     {
         return [
-            [Criterion::EQUAL],
+            [DataObject::CHANGE_VALUE],
         ];
+
+        return [
+            ['EQUAL'],
+            ['NOT_EQUAL'],
+            ['GREATER_EQUAL'],
+            ['LESS_EQUAL'],
+            ['IN'],
+            ['NOT_IN'],
+        ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Injector::inst()->registerService(new CriterionAdaptor(), CriterionAdaptorInterface::class);
     }
 
 }
