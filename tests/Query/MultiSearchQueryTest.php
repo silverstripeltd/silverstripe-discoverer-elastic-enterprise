@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Tests\Query;
+namespace SilverStripe\SearchElastic\Tests\Query;
 
 use Elastic\OpenApi\Codegen\Serializer\SmartSerializer;
 use SilverStripe\Core\Injector\Injector;

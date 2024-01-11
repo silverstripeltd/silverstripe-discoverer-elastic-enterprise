@@ -18,85 +18,9 @@ class SearchQuery extends Query
     use Configurable;
     use Injectable;
 
-    private string $query = '';
-
     private ?SimpleObject $rawFilters = null;
 
     private ?SimpleObject $rawFacets = null;
-
-    private ?array $resultFields = null;
-
-    private ?array $sort = null;
-
-    private ?array $searchFields = null;
-
-    private ?int $pageSize = null;
-
-    private ?int $pageNum = null;
-
-    /**
-     * Set the query string that all documents must match in order to be returned. This can be set to an empty string to
-     * return all documents
-     */
-    public function setQueryString(string $query): self
-    {
-        $this->query = $query;
-
-        return $this;
-    }
-
-    /**
-     * The query string set on this query
-     */
-    public function getQueryString(): ?string
-    {
-        return $this->query;
-    }
-
-    /**
-     * Add a sort method to the list, see:
-     * https://www.elastic.co/guide/en/app-search/current/sort.html.
-     *
-     * @param string $direction valid values are asc/desc
-     */
-    public function addSort(string $fieldName, string $direction = 'asc'): self
-    {
-        if (!isset($this->sort)) {
-            $this->sort = [];
-        }
-
-        $this->sort[] = [$fieldName => mb_strtolower($direction)];
-
-        return $this;
-    }
-
-    /**
-     * Adds multiple sort methods at once.
-     *
-     * @param array $sortMethods [$fieldname => $direction]
-     */
-    public function addSorts(array $sortMethods): self
-    {
-        foreach ($sortMethods as $fieldName => $direction) {
-            $this->addSort($fieldName, $direction);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the raw 'filters' attribute for filtering results. For more information on how to create filters, consult
-     * the Elastic App Search documentation: https://www.elastic.co/guide/en/app-search/current/filters.html.
-     *
-     * @todo It would be nice to allow for PHP-built filters (e.g. built from objects rather than needing the developer
-     * to figure out how Elastic's 'filters' key works) but that's a feature for a later date.
-     */
-    public function addRawFilters(SimpleObject $filters): self
-    {
-        $this->rawFilters = $filters;
-
-        return $this;
-    }
 
     /**
      * Sets the raw 'facets' attribute for returning metadata related to the search query. See the docs for help:
@@ -107,64 +31,6 @@ class SearchQuery extends Query
         $this->rawFacets = $facets;
 
         return $this;
-    }
-
-    public function setFacets(array $facet): self
-    {
-        // TODO: Implement addFacet() method.
-        return $this;
-    }
-
-    public function addResultField(string $field, string $type = 'raw', int $size = 0): self
-    {
-        if (!isset($this->resultFields)) {
-            $this->resultFields = [];
-        }
-
-        $this->resultFields[$field] = [
-            'type' => $type,
-            'size' => $size,
-        ];
-
-        return $this;
-    }
-
-    public function addSearchField(string $field, int $weight = 0): self
-    {
-        if (!isset($this->searchFields)) {
-            $this->searchFields = [];
-        }
-
-        $this->searchFields[$field] = $weight;
-
-        return $this;
-    }
-
-    public function setPageSize(int $pageSize): self
-    {
-        $this->pageSize = $pageSize;
-
-        return $this;
-    }
-
-    public function setPageNum(int $pageNum): self
-    {
-        $this->pageNum = $pageNum;
-
-        return $this;
-    }
-
-    public function setPagination(int $pageSize, int $pageNum): self
-    {
-        $this->pageSize = $pageSize;
-        $this->pageNum = $pageNum;
-
-        return $this;
-    }
-
-    public function hasPagination(): bool
-    {
-        return isset($this->pageNum) || isset($this->pageSize);
     }
 
     /**

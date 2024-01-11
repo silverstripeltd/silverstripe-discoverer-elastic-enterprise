@@ -1,13 +1,12 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Tests\Filter;
+namespace SilverStripe\SearchElastic\Tests\Filter;
 
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Search\Filter\Criterion;
-use SilverStripe\SearchElastic\Filter\CriterionAdaptor;
 use SilverStripe\Search\Filter\CriterionAdaptor as CriterionAdaptorInterface;
+use SilverStripe\SearchElastic\Filter\CriterionAdaptor;
 
 class CriterionAdaptorTest extends SapphireTest
 {
@@ -15,7 +14,7 @@ class CriterionAdaptorTest extends SapphireTest
     /**
      * @dataProvider provideBasicComparisons
      */
-    public function testStringComparison($comparison): void
+    public function testBasicComparison(string $comparison): void
     {
         $criterion = Criterion::create('fieldName', 'fieldValue', $comparison);
         // Not using injector, because I'm testing this specific class
@@ -30,16 +29,107 @@ class CriterionAdaptorTest extends SapphireTest
     public function provideBasicComparisons(): array
     {
         return [
-            [DataObject::CHANGE_VALUE],
+            [Criterion::EQUAL],
+            [Criterion::NOT_EQUAL],
+            [Criterion::GREATER_EQUAL],
+            [Criterion::LESS_EQUAL],
+        ];
+    }
+
+    /**
+     * @dataProvider provideUnsupportedComparisons
+     */
+    public function testUnsupportedComparison(string $comparison): void
+    {
+        $this->expectExceptionMessage(sprintf('Unsupported Elastic comparison "%s"', $comparison));
+
+        $criterion = Criterion::create('fieldName', 'fieldValue', $comparison);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+        // Should throw our Exception
+        $adaptor->prepareClause($criterion);
+    }
+
+    public function provideUnsupportedComparisons(): array
+    {
+        return [
+            [Criterion::LESS_THAN],
+            [Criterion::GREATER_THAN],
+            [Criterion::IS_NULL],
+            [Criterion::IS_NOT_NULL],
+        ];
+    }
+
+    public function testRangeToFromComparison(): void
+    {
+        $range = [
+            'from' => 1,
+            'to' => 2,
+        ];
+        $criterion = Criterion::create('fieldName', $range, Criterion::RANGE);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+        $expected = [
+            'fieldName' => $range,
         ];
 
+        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+    }
+
+    public function testRangeToComparison(): void
+    {
+        $range = [
+            'to' => 2,
+        ];
+        $criterion = Criterion::create('fieldName', $range, Criterion::RANGE);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+        $expected = [
+            'fieldName' => $range,
+        ];
+
+        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+    }
+
+    public function testRangeFromComparison(): void
+    {
+        $range = [
+            'from' => 1,
+        ];
+        $criterion = Criterion::create('fieldName', $range, Criterion::RANGE);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+        $expected = [
+            'fieldName' => $range,
+        ];
+
+        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+    }
+
+    /**
+     * @dataProvider provideInComparisons
+     */
+    public function testValidInComparison(string $comparison): void
+    {
+        $range = [
+            1,
+            2,
+        ];
+        $criterion = Criterion::create('fieldName', $range, $comparison);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+        $expected = [
+            'fieldName' => $range,
+        ];
+
+        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+    }
+
+    public function provideInComparisons(): array
+    {
         return [
-            ['EQUAL'],
-            ['NOT_EQUAL'],
-            ['GREATER_EQUAL'],
-            ['LESS_EQUAL'],
-            ['IN'],
-            ['NOT_IN'],
+            [Criterion::IN],
+            [Criterion::NOT_IN],
         ];
     }
 

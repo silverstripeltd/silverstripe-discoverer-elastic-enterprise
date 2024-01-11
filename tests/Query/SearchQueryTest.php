@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Tests\Query;
+namespace SilverStripe\SearchElastic\Tests\Query;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use SilverStripe\Core\Injector\Injector;

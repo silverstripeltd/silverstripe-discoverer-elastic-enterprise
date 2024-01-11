@@ -77,15 +77,6 @@ class AppSearchService
     public function search(SearchQuery $query, string $engineName, HTTPRequest $request): ?SearchResult
     {
         $config = $this->config();
-
-        // Ensure we take pagination into account within the query. Allows overriding of pagination directly if required
-        // by simply calling setPagination on the SearchQuery object prior to calling this method.
-        if (!$query->hasPagination()) {
-            $pageNum = (int)$request->getVar($config->get('pagination_getvar')) / (int)$config->get('pagination_size') ?? 0;
-            ++$pageNum; // We do this because PaginatedList uses a zero-based index and App Search is one-based
-            $query->setPagination((int)$config->get('pagination_size'), $pageNum);
-        }
-
         $response = $this->gateway->search($engineName, $query->getSearchParams())->asArray();
 
         // Allow extensions to manipulate the results array before any validation or processing occurs

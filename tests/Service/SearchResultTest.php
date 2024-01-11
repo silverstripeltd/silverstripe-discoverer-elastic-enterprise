@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Tests\Service;
+namespace SilverStripe\SearchElastic\Tests\Service;
 
 use InvalidArgumentException;
 use LogicException;

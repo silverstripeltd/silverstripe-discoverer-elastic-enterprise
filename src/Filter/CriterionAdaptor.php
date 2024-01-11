@@ -30,18 +30,24 @@ class CriterionAdaptor implements CriterionAdaptorInterface
         switch ($comparison) {
             case Criterion::RANGE:
                 $value = $criterion->getValue();
-                $from = $value['from'] ?? '';
-                $to = $value['to'] ?? '';
+                $from = $value['from'] ?? null;
+                $to = $value['to'] ?? null;
+                $range = [];
 
-                if (!$from || !$to) {
-                    throw new Exception('Range comparison value must contain array keys "from" and "to"');
+                if ($from) {
+                    $range['from'] = $from;
+                }
+
+                if ($to) {
+                    $range['to'] = $to;
+                }
+
+                if (!$range) {
+                    throw new Exception('Range comparison $value must contain one (or both) of keys "from" and "to"');
                 }
 
                 return [
-                    $criterion->getTarget() => [
-                        'from' => $from,
-                        'to' => $to,
-                    ]
+                    $criterion->getTarget() => $range,
                 ];
             default:
                 return [

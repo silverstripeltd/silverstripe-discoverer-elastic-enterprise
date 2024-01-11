@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\ElasticAppSearch\Tests\Service;
+namespace SilverStripe\SearchElastic\Tests\Service;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema;
 use Elastic\EnterpriseSearch\Response\Response;
