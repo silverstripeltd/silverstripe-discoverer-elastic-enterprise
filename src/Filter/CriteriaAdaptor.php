@@ -19,7 +19,7 @@ class CriteriaAdaptor implements CriteriaAdaptorInterface
         Criterion::NOT_EQUAL,
     ];
 
-    public function prepareClause(Criteria $criteria): array
+    public function prepareCriteria(Criteria $criteria): array
     {
         $all = [];
         $any = [];

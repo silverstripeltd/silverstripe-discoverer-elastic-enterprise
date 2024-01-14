@@ -19,7 +19,7 @@ class CriterionAdaptor implements CriterionAdaptorInterface
     /**
      * @throws Exception
      */
-    public function prepareClause(Criterion $criterion): array
+    public function prepareCriterion(Criterion $criterion): array
     {
         $comparison = $criterion->getComparison();
 

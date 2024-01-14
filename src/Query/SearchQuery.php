@@ -8,7 +8,6 @@ use Elastic\EnterpriseSearch\AppSearch\Schema\SearchRequestParams;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Search\Query\Facet;
 use SilverStripe\Search\Query\Filter;
 use SilverStripe\Search\Query\Query;
 use stdClass;

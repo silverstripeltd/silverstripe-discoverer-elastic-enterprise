@@ -23,7 +23,7 @@ class CriterionAdaptorTest extends SapphireTest
             'fieldName' => 'fieldValue',
         ];
 
-        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
     public function provideBasicComparisons(): array
@@ -47,7 +47,7 @@ class CriterionAdaptorTest extends SapphireTest
         // Not using injector, because I'm testing this specific class
         $adaptor = new CriterionAdaptor();
         // Should throw our Exception
-        $adaptor->prepareClause($criterion);
+        $adaptor->prepareCriterion($criterion);
     }
 
     public function provideUnsupportedComparisons(): array
@@ -73,7 +73,7 @@ class CriterionAdaptorTest extends SapphireTest
             'fieldName' => $range,
         ];
 
-        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
     public function testRangeToComparison(): void
@@ -88,7 +88,7 @@ class CriterionAdaptorTest extends SapphireTest
             'fieldName' => $range,
         ];
 
-        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
     public function testRangeFromComparison(): void
@@ -103,7 +103,7 @@ class CriterionAdaptorTest extends SapphireTest
             'fieldName' => $range,
         ];
 
-        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
     /**
@@ -122,7 +122,7 @@ class CriterionAdaptorTest extends SapphireTest
             'fieldName' => $range,
         ];
 
-        $this->assertEquals($expected, $adaptor->prepareClause($criterion));
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
     public function provideInComparisons(): array
