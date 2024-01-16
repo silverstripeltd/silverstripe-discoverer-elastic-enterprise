@@ -1,10 +1,10 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Filter;
+namespace SilverStripe\SearchElastic\Query\Filter;
 
 use Exception;
-use SilverStripe\Search\Filter\Criterion;
-use SilverStripe\Search\Filter\CriterionAdaptor as CriterionAdaptorInterface;
+use SilverStripe\Search\Query\Filter\Criterion;
+use SilverStripe\Search\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
 
 class CriterionAdaptor implements CriterionAdaptorInterface
 {

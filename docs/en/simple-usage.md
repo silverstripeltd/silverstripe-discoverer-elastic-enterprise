@@ -46,7 +46,18 @@ class SearchResults extends Page
 
 namespace App\Pages;
 
-use PageController;use Psr\Log\LoggerInterface;use SilverStripe\Core\Convert;use SilverStripe\Core\Injector\Injector;use SilverStripe\Forms\FieldList;use SilverStripe\Forms\Form;use SilverStripe\Forms\FormAction;use SilverStripe\Forms\TextField;use SilverStripe\SearchElastic\Query\SearchQuery;use SilverStripe\SearchElastic\Service\AppSearchService;use SilverStripe\SearchElastic\Service\SearchResult;use Throwable;
+use PageController;
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Search\Query\Query;
+use SilverStripe\SearchElastic\Service\AppSearchService;
+use SilverStripe\SearchElastic\Service\SearchResult;
+use Throwable;
 
 class SearchResultsController extends PageController
 {
@@ -91,7 +102,7 @@ class SearchResultsController extends PageController
         try {
             $service = AppSearchService::create();
 
-            $query = SearchQuery::create();
+            $query = Query::create();
 
             $query->setQueryString($keywords);
             // Assumes you have a 'title' field in your schema - see below

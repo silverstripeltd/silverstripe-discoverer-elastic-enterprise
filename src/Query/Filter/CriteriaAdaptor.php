@@ -1,11 +1,11 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Filter;
+namespace SilverStripe\SearchElastic\Query\Filter;
 
 use Exception;
-use SilverStripe\Search\Filter\Criteria;
-use SilverStripe\Search\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
-use SilverStripe\Search\Filter\Criterion;
+use SilverStripe\Search\Query\Filter\Criteria;
+use SilverStripe\Search\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
+use SilverStripe\Search\Query\Filter\Criterion;
 
 /**
  * Docs describing what filtering is possible:

@@ -24,13 +24,13 @@ result for the keyword. In this way, I can link to the "file" section if I detec
 results there.
 
 ```php
-use Psr\Log\LoggerInterface;use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\MultiSearchQuery;use SilverStripe\SearchElastic\Query\SearchQuery;use SilverStripe\SearchElastic\Service\AppSearchService;
+use Psr\Log\LoggerInterface;use SilverStripe\Core\Injector\Injector;use SilverStripe\Search\Query\Query;use SilverStripe\SearchElastic\Query\MultiSearchQuery;use SilverStripe\SearchElastic\Query\SearchQuery;use SilverStripe\SearchElastic\Service\AppSearchService;
 
 /*...*/
 
 $service = AppSearchService::create();
 
-$keywordQuery = SearchQuery::create();
+$keywordQuery = Query::create();
 $keywordQuery->setQueryString('biscuits');
 
 $keywordFilters = new stdClass();
@@ -38,7 +38,7 @@ $keywordFilters->all = [];
 $keywordFilters->all[] = (object) ['content_type' => ['page']];
 $keywordQuery->addRawFilters($keywordFilters);
 
-$contentTypeQuery = SearchQuery::create();
+$contentTypeQuery = Query::create();
 $contentTypeQuery->setQueryString('biscuits');
 $contentTypeQuery->setPagination(0, 1);
 

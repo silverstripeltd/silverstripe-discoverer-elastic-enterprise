@@ -101,37 +101,6 @@ class AppSearchService
     }
 
     /**
-     * @throws Exception If the connection to Elastic is not available, index not configured or any other error
-     */
-    public function multisearch(MultiSearchQuery $query, string $engineName, HTTPRequest $request): ?MultiSearchResult
-    {
-        $config = $this->config();
-        $queries = $query->getQueries();
-
-        foreach ($queries as $singleQuery) {
-            if (!$singleQuery->hasPagination()) {
-                $pageNum = $request->getVar($config->get('pagination_getvar')) / $config->get('pagination_size') ?? 0;
-                // We do this because PaginatedList uses a zero-based index and App Search is one-based
-                ++$pageNum;
-                $singleQuery->setPagination($config->get('pagination_size'), $pageNum);
-            }
-        }
-
-        $response = $this->gateway->multisearch($engineName, new MultiSearchData($query->getSearchParams()))->asArray();
-
-        // Allow extensions to manipulate the results array before any validation or processing occurs
-        // WARNING: This extension hook is fired before the response is checked for validity, it may not be a valid
-        // response from Elastic App Search. Use caution when modifying the array or assuming any structure exists.
-        $this->extend('augmentMultiSearchResultsPreValidation', $response);
-
-        // Create the new MultiSearchResult object in which to store results, including validating the response
-        $result = MultiSearchResult::create($query, $response);
-        $result->setEngineName($engineName);
-
-        return $result;
-    }
-
-    /**
      * @param string $className The FQCN to attempt to map to a human-readable name (e.g. SilverStripe\Security\Member)
      *
      * @return string The human-readable name, or the original class name if a suitable map can't be found

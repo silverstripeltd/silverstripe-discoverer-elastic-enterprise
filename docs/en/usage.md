@@ -35,9 +35,10 @@ For an overview of how to use the classes, see [simple-usage.md](simple-usage.md
 Specify the keyword (or words) you want to search for using `$query->setQuery('search keywords')`. Subsequent calls to this method will override older values.
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Search\Query\Query;
 
-$query = Injector::inst()->get(SearchQuery::class);
+$query = Query::create();
 $query->setQuery('keywords to search for');
 ```
 
@@ -45,7 +46,7 @@ $query->setQuery('keywords to search for');
 You can specify raw App Search filters through to `SearchQuery` using the `addRawFilters()` method. For now, these should be passed in the exact way that the [elastic/app-search-php module expects](https://swiftype.com/documentation/app-search/api/search/filters). An example of this is below:
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\Search\Query\Query;use SilverStripe\SearchElastic\Query\SearchQuery;
 
 $filters = new stdClass;
 
@@ -63,7 +64,7 @@ $filters->none = [];
 $filters->none[] = (object)['title' => 'Text string'];
 
 // Apply the filters:
-$query = Injector::inst()->get(SearchQuery::class);
+$query = Query::create();
 $query->addRawFilters($filters);
 
 // Lots more examples are available here: https://swiftype.com/documentation/app-search/api/search/filters
@@ -94,7 +95,8 @@ $facets->taxonomy_terms[] = (object) [
 ];
 
 // Apply the facets:
-$query = Injector::inst()->get(SearchQuery::class);
+$query = Query::create();
+// TODO needs to be updated once facet support is added
 $query->addRawFacets($facets);
 ```
 
@@ -118,12 +120,15 @@ You can use these values in templates:
 [Result Fields](https://swiftype.com/documentation/app-search/api/search/result-fields) are convenient ways to ask Elastic to return contextual information on why a document was returned in search results. This is often known as 'context highlighting' or 'excerpt content'. For example, a search for `test` would return the following result field for the page title if requested: `This is a <em>test</em> page`.
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Search\Query\Query;
 
 // Request an HTML snippet of an indexed field, with an optional maximum character length (default 100, range between 20 and 1000 characters)
-$query = Injector::inst()->get(SearchQuery::class);
-$query->addResultField('title', 'snippet');
-$query->addResultField('content', 'snippet', 500);
+$query = Query::create();
+// 'title' field, with no limit, and set to formatted (a "snippet" as Elastic calls it)
+$query->addResultField('title', 0, true);
+// 'content' field, with a limit of 500 characters, and set to formatted (a "snippet" as Elastic calls it)
+$query->addResultField('content', 500, true);
 ```
 
 Snippets are returned to your template as additional values within each returned object that you can access as properties of `$ElasticSnippets`. For example:
@@ -154,10 +159,11 @@ You can optionally specify a weighting to give the text field you want to search
 The below example will ensure the quey only searches the `title` and `content` fields.
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Search\Query\Query;
 
-$query = Injector::inst()->get(SearchQuery::class);
-$query->addSearchField('content'); // Don't specify a weight for content, the default will be used
+$query = Query::create();
+$query->addSearchField('content'); // Don't specify a weight for content, the default of 0 will be used
 $query->addSearchField('title', 10); // Make title the most relevant field
 ```
 
@@ -166,16 +172,19 @@ $query->addSearchField('title', 10); // Make title the most relevant field
 The default sort is `_score`, which is essentially relevance. You can add one or more sorts to help organise your results via the `SearchQuery` class:
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Search\Query\Query;
 
-$query = Injector::inst()->get(SearchQuery::class);
+$query = Query::create();
 // For a single sort, just pass the field and direction to addSort()
-$query->addSort('publication_date', 'asc');
+$query->addSort('publication_date', Query::SORT_DESC);
+// Default direction is ASC, so you can leave the second argument out
+$query->addSort('publication_date');
 
 // For multiple sorts, pass an array to addSorts()
 $query->addSorts([
-    'publication_date' => 'desc',
-    'title' => 'asc',
+    'publication_date' => Query::SORT_DESC,
+    'title' => Query::SORT_ASC,
 ]);
 ```
 
@@ -232,12 +241,13 @@ By default, this module automatically handles the pagination of results for you,
 **Note:** Page numbers in Elastic App Search are a one-based index (e.g. starting at 1). The Silverstripe CMS `PaginatedList` class is a zero-based index (starting at `0`). If you don't use the built-in pagination settings, you will need to account for this (e.g. by incrementing `$currentPageNum` when calling `setPagination`).
 
 ```php
-use SilverStripe\Core\Injector\Injector;use SilverStripe\SearchElastic\Query\SearchQuery;
+use SilverStripe\Core\Injector\Injector;use SilverStripe\Search\Query\Query;
 
 // Below will result in Elastic returning results 81 - 100
-$query = Injector::inst()->get(SearchQuery::class);
-$query->setPagination($pageSize = 20, $currentPageNum = 4);
+$query = Query::create();
+$query->setPagination($pageSize = 20, $pageNum = 4);
 ```
+
 ## Advanced usage
 There are some more advanced topics that have their own pages as well.
 * [View detailed instructions for enabling the spellcheck / "Did you mean" feature](usage-spellcheck.md)
