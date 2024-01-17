@@ -12,9 +12,12 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Search\Query\Query;
+use SilverStripe\Search\Service\Result\Field;
+use SilverStripe\Search\Service\Result\Record;
 use SilverStripe\Search\Service\Result\Results;
 use SilverStripe\Search\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
-use SilverStripe\SearchElastic\Helpers\QueryParamsHelper;
+use SilverStripe\SearchElastic\Helpers\QueryParamsProcessor;
+use SilverStripe\SearchElastic\Helpers\ResultsProcessor;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 {
@@ -37,13 +40,17 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 
     public function search(Query $query, ?string $indexName = null): Results
     {
-        $params = QueryParamsHelper::getQueryParams($query);
+        $params = QueryParamsProcessor::getQueryParams($query);
         $engine = $this->environmentizeIndex($indexName);
         $request = new Search($engine, $params);
         $response = $this->client->appSearch()->search($request);
 
         Debug::dump($response->asArray());
-        return new Results($query);
+        $results = Results::create($query);
+
+        ResultsProcessor::processResponse($results, $response);
+
+        return $results;
     }
 
     public function logClickThrough(): void
@@ -62,29 +69,19 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         return $indexName;
     }
 
-    private function extractResults(Response $response): PaginatedList
+    private function validateResponse(Response $response): void
     {
-        $resultList = ArrayList::create();
-        $responseArray = $resultList->toArray();
+        $responseArray = $response->asArray();
 
-        if (!array_key_exists('results', $responseArray)) {
-            throw new Exception('Elastic Response contained to results array');
+        // Ensure we don't have errors in our response
+        if (array_key_exists('errors', $responseArray)) {
+            throw new LogicException('Response appears to be from Elastic but is an error, not a valid search result');
         }
 
-        foreach ($responseArray['results'] as $result) {
-            // Get the DataObject ClassName and ID for lookup in the database
-            $class = $result['record_base_class']['raw'];
-            $id = $result['record_id']['raw'];
+        // Ensure we have both required top-level array keys (`meta` and `results`)
+        if (!array_key_exists('meta', $response) || !array_key_exists('results', $response)) {
+            throw new InvalidArgumentException('Response decoded as JSON but is not an Elastic search response');
         }
-    }
-
-    private function findDataObject(string $className, int $id): ?DataObject
-    {
-        if (!$className || !$id) {
-            return null;
-        }
-
-        return DataObject::get($className)->byID($id);
     }
 
 }

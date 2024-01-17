@@ -15,7 +15,7 @@ use SilverStripe\Search\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface
 use SilverStripe\Search\Query\Filter\Criterion;
 use SilverStripe\Search\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
 use SilverStripe\Search\Query\Query;
-use SilverStripe\SearchElastic\Helpers\QueryParamsHelper;
+use SilverStripe\SearchElastic\Helpers\QueryParamsProcessor;
 use SilverStripe\SearchElastic\Query\Facet\FacetAdaptor;
 use SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor;
 use SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor;
@@ -29,14 +29,14 @@ class QueryParamsHelperTest extends SapphireTest
     /**
      * @see FacetAdaptorTest for test coverage rearding preparation of facets
      *
-     * This test only covers the basic functions performed in @see QueryParamsHelper::getFacetsFromQuery()
+     * This test only covers the basic functions performed in @see QueryParamsProcessor::getFacetsFromQuery()
      */
     public function testGetFacetsFromQuery(): void
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getFacetsFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getFacetsFromQuery');
+        /** @see QueryParamsProcessor::getFacetsFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getFacetsFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no facets are set
@@ -66,14 +66,14 @@ class QueryParamsHelperTest extends SapphireTest
     /**
      * @see CriteriaAdaptorTest for test coverage regarding preparation of filters
      *
-     * This test only covers the basic functions performed in @see QueryParamsHelper::getFiltersFromQuery()
+     * This test only covers the basic functions performed in @see QueryParamsProcessor::getFiltersFromQuery()
      */
     public function testGetFiltersFromQuery(): void
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getFiltersFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getFiltersFromQuery');
+        /** @see QueryParamsProcessor::getFiltersFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getFiltersFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no filters are set
@@ -116,8 +116,8 @@ class QueryParamsHelperTest extends SapphireTest
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getPaginationFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getPaginationFromQuery');
+        /** @see QueryParamsProcessor::getPaginationFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getPaginationFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no pagination is set
@@ -137,8 +137,8 @@ class QueryParamsHelperTest extends SapphireTest
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getResultFieldsFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getResultFieldsFromQuery');
+        /** @see QueryParamsProcessor::getResultFieldsFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getResultFieldsFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no result fields are set
@@ -148,6 +148,8 @@ class QueryParamsHelperTest extends SapphireTest
         $query->addResultField('field1');
         $query->addResultField('field2', 0, true);
         $query->addResultField('field3', 10);
+        // Raw and Snippet for field4
+        $query->addResultField('field4', 100);
         $query->addResultField('field4', 20, true);
 
         /** @var SimpleObject $searchFields */
@@ -182,6 +184,8 @@ class QueryParamsHelperTest extends SapphireTest
         $this->assertEquals($fieldThreeExpected, $resultsFields->field3);
 
         $fieldFourExpected = new stdClass();
+        $fieldFourExpected->raw = new stdClass();
+        $fieldFourExpected->raw->size = 100;
         $fieldFourExpected->snippet = new stdClass();
         $fieldFourExpected->snippet->size = 20;
 
@@ -192,8 +196,8 @@ class QueryParamsHelperTest extends SapphireTest
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getSearchFieldsFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getSearchFieldsFromQuery');
+        /** @see QueryParamsProcessor::getSearchFieldsFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getSearchFieldsFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no search fields are set
@@ -223,8 +227,8 @@ class QueryParamsHelperTest extends SapphireTest
     {
         $query = Query::create();
 
-        /** @see QueryParamsHelper::getSortFromQuery() */
-        $reflectionMethod = new ReflectionMethod(QueryParamsHelper::class, 'getSortFromQuery');
+        /** @see QueryParamsProcessor::getSortFromQuery() */
+        $reflectionMethod = new ReflectionMethod(QueryParamsProcessor::class, 'getSortFromQuery');
         $reflectionMethod->setAccessible(true);
 
         // First test that the value is null if no sorts are set
@@ -258,7 +262,7 @@ class QueryParamsHelperTest extends SapphireTest
         $query->filter('field1', 'value1', Criterion::EQUAL);
         $query->setPagination(10, 2);
 
-        $params = QueryParamsHelper::getQueryParams($query);
+        $params = QueryParamsProcessor::getQueryParams($query);
 
         $this->assertEquals('search string', $params->query);
         $this->assertInstanceOf(SimpleObject::class, $params->facets);

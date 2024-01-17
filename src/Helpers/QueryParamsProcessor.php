@@ -10,7 +10,7 @@ use SilverStripe\Search\Query\Filter\Criteria;
 use SilverStripe\Search\Query\Query;
 use stdClass;
 
-class QueryParamsHelper
+class QueryParamsProcessor
 {
 
     public static function getQueryParams(Query $query): SearchRequestParams
@@ -123,7 +123,10 @@ class QueryParamsHelper
             $fieldType = $field->isFormatted() ? 'snippet' : 'raw';
             $fieldSize = $field->getLength();
 
-            $resultFields->{$fieldName} = new stdClass();
+            if (!property_exists($resultFields, $fieldName)) {
+                $resultFields->{$fieldName} = new stdClass();
+            }
+
             $resultFields->{$fieldName}->{$fieldType} = new stdClass();
 
             if ($fieldSize) {
