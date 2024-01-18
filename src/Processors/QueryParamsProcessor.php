@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Helpers;
+namespace SilverStripe\SearchElastic\Processors;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\PaginationResponseObject;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchFields;

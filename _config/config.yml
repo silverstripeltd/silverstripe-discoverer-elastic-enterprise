@@ -2,6 +2,12 @@
 Name: search-elastic-config
 ---
 SilverStripe\Core\Injector\Injector:
+  SilverStripe\Search\Query\Facet\FacetAdaptor:
+    class: SilverStripe\SearchElastic\Query\Facet\FacetAdaptor
+  SilverStripe\Search\Query\Filter\CriteriaAdaptor:
+    class: SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor
+  SilverStripe\Search\Query\Filter\CriterionAdaptor:
+    class: SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor
   SilverStripe\Search\Service\SearchServiceAdaptor:
     class: SilverStripe\SearchElastic\Service\SearchServiceAdaptor
   Elastic\EnterpriseSearch\Client:

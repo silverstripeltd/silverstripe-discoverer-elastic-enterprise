@@ -2,15 +2,19 @@
 
 namespace SilverStripe\SearchElastic\Service;
 
+use Elastic\EnterpriseSearch\AppSearch\Request\LogClickthrough;
 use Elastic\EnterpriseSearch\AppSearch\Request\Search;
+use Elastic\EnterpriseSearch\AppSearch\Schema\ClickParams;
 use Elastic\EnterpriseSearch\Client;
+use Exception;
 use SilverStripe\Core\Environment;
+use SilverStripe\Dev\Debug;
 use SilverStripe\Search\Analytics\AnalyticsData;
 use SilverStripe\Search\Query\Query;
 use SilverStripe\Search\Service\Results\Results;
 use SilverStripe\Search\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
-use SilverStripe\SearchElastic\Helpers\QueryParamsProcessor;
-use SilverStripe\SearchElastic\Helpers\ResultsProcessor;
+use SilverStripe\SearchElastic\Processors\QueryParamsProcessor;
+use SilverStripe\SearchElastic\Processors\ResultsProcessor;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 {
@@ -31,6 +35,9 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         $this->client = $client;
     }
 
+    /**
+     * @throws Exception
+     */
     public function search(Query $query, ?string $indexName = null): Results
     {
         $params = QueryParamsProcessor::getQueryParams($query);
@@ -38,14 +45,23 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         $request = new Search($engine, $params);
         $response = $this->client->appSearch()->search($request);
 
-        $results = ResultsProcessor::processResponse($query, $response);
-
-        return $results;
+        return ResultsProcessor::getProcessedResults($query, $response);
     }
 
     public function processAnalytics(AnalyticsData $analyticsData): void
     {
-        // TODO: Implement logClickThrough() method.
+        $query = $analyticsData->getQueryString();
+        $documentId = $analyticsData->getDocumentId();
+        $requestId = $analyticsData->getRequestId();
+        $engineName = $analyticsData->getEngineName();
+
+        $params = new ClickParams($query, $documentId);
+
+        if ($requestId) {
+            $params->request_id = $requestId;
+        }
+
+        $this->client->appSearch()->logClickthrough(new LogClickthrough($engineName, $params));
     }
 
     private function environmentizeIndex(string $indexName): string

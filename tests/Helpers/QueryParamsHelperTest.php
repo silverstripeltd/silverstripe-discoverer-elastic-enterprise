@@ -15,7 +15,7 @@ use SilverStripe\Search\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface
 use SilverStripe\Search\Query\Filter\Criterion;
 use SilverStripe\Search\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
 use SilverStripe\Search\Query\Query;
-use SilverStripe\SearchElastic\Helpers\QueryParamsProcessor;
+use SilverStripe\SearchElastic\Processors\QueryParamsProcessor;
 use SilverStripe\SearchElastic\Query\Facet\FacetAdaptor;
 use SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor;
 use SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor;

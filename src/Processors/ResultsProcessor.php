@@ -1,12 +1,14 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Helpers;
+namespace SilverStripe\SearchElastic\Processors;
 
 use Elastic\EnterpriseSearch\Response\Response;
 use Exception;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Environment;
 use SilverStripe\Search\Analytics\AnalyticsData;
 use SilverStripe\Search\Analytics\AnalyticsMiddleware;
+use SilverStripe\Search\Query\Query;
 use SilverStripe\Search\Service\Results\Facet;
 use SilverStripe\Search\Service\Results\FacetData;
 use SilverStripe\Search\Service\Results\Field;
@@ -32,14 +34,14 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    public static function processResponse(string $query, Response $response): Results
+    public static function getProcessedResults(Query $query, Response $response): Results
     {
         self::validateResponse($response);
 
-        $results = Results::create();
+        $results = Results::create($query);
 
         self::processMetaData($results, $response);
-        self::processRecords($results, $query, $response);
+        self::processRecords($results, $response);
         self::processFacets($results, $response);
 
         return $results;
@@ -144,7 +146,7 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    private static function processRecords(Results $results, string $query, Response $response): void
+    private static function processRecords(Results $results, Response $response): void
     {
         $responseArray = $response->asArray();
 
@@ -152,8 +154,10 @@ class ResultsProcessor
             throw new Exception('Elastic Response contained to results array');
         }
 
+        // Only used if analytics are enabled
         $requestId = $responseArray['meta']['request_id'] ?? null;
         $engineName = $responseArray['meta']['engine']['name'] ?? null;
+        $queryString = $results->getQuery()->getQueryString();
 
         // Shouldn't ever be null, since we passed the validation step which requires these fields
         if (!$requestId || !$engineName) {
@@ -172,16 +176,16 @@ class ResultsProcessor
                 $field->setSnippet($valueFields['snippet'] ?? null);
 
                 /** @see Record::__set() */
-                $result->{$formattedFieldName} = $field;
+                $record->{$formattedFieldName} = $field;
             }
 
-            if (AnalyticsMiddleware::config()->get('enable_analytics')) {
+            if (Environment::getEnv(AnalyticsMiddleware::ENV_ANALYTICS_ENABLED)) {
                 // This field should always be there, as it's the default ID field in Elastic. We won't break stuff
                 // if it isn't there though - better that search works without analytics
                 $documentId = $result['id']['raw'] ?? null;
 
                 $analyticsData = AnalyticsData::create();
-                $analyticsData->setQuery($query);
+                $analyticsData->setQueryString($queryString);
                 $analyticsData->setEngineName($engineName);
                 $analyticsData->setDocumentId($documentId);
                 $analyticsData->setRequestId($requestId);
