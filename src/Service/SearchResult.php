@@ -12,7 +12,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\PaginatedList;
-use SilverStripe\SearchElastic\Controller\ClickthroughController;
+use SilverStripe\SearchElastic\Controller\AnalyticsController;
 use SilverStripe\Security\Security;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\ViewableData;
@@ -351,12 +351,12 @@ class SearchResult extends ViewableData
      * Get the clickthrough link for a given DataObject. This requires a set of data provided by the SearchService
      * during creation of the object to get context. We then create a JSON object and base64 encode it to get a URL-safe
      * string that can be inserted in a tracking URL, which will be picked up by the @param mixed $result
-     * @see ClickthroughController and a
+     * @see AnalyticsController and a
      * clickthrough registered in Elastic App Search before the user is directed to the search result.
      */
     private function getClickthroughLink($result, DataObject $dataObject): string
     {
-        $controllerLink = ClickthroughController::get_base_url();
+        $controllerLink = AnalyticsController::get_base_url();
         $documentId = $result['id']['raw'] ?? null;
         $requestId = $this->response['meta']['request_id'] ?? null;
 

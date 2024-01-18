@@ -117,6 +117,10 @@ class QueryParamsProcessor
         $resultFields->record_base_class->raw = new stdClass();
         $resultFields->record_id = new stdClass();
         $resultFields->record_id->raw = new stdClass();
+        // The ID field from Elastic should always be added anyway, but having it here explicitly might help if their
+        // API ever changes
+        $resultFields->id = new stdClass();
+        $resultFields->id->raw = new stdClass();
 
         foreach ($query->getResultFields() as $field) {
             $fieldName = $field->getFieldName();

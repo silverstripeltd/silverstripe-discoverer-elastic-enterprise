@@ -5,11 +5,13 @@ namespace SilverStripe\SearchElastic\Helpers;
 use Elastic\EnterpriseSearch\Response\Response;
 use Exception;
 use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Search\Service\Result\Facet;
-use SilverStripe\Search\Service\Result\FacetData;
-use SilverStripe\Search\Service\Result\Field;
-use SilverStripe\Search\Service\Result\Record;
-use SilverStripe\Search\Service\Result\Results;
+use SilverStripe\Search\Analytics\AnalyticsData;
+use SilverStripe\Search\Analytics\AnalyticsMiddleware;
+use SilverStripe\Search\Service\Results\Facet;
+use SilverStripe\Search\Service\Results\FacetData;
+use SilverStripe\Search\Service\Results\Field;
+use SilverStripe\Search\Service\Results\Record;
+use SilverStripe\Search\Service\Results\Results;
 
 class ResultsProcessor
 {
@@ -30,11 +32,88 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    public static function processResponse(Results $results, Response $response): void
+    public static function processResponse(string $query, Response $response): Results
     {
+        self::validateResponse($response);
+
+        $results = Results::create();
+
         self::processMetaData($results, $response);
-        self::processRecords($results, $response);
+        self::processRecords($results, $query, $response);
         self::processFacets($results, $response);
+
+        return $results;
+    }
+
+    private static function validateResponse(Response $response): void
+    {
+        $responseArray = $response->asArray();
+
+        // If any errors are present, then let's throw and track what they were
+        if (array_key_exists('errors', $responseArray)) {
+            throw new Exception(sprintf('Elastic response contained errors: %s', json_encode($responseArray['errors'])));
+        }
+
+        // The top level fields that we expect to receive from Elastic for each search
+        $meta = $responseArray['meta'] ?? null;
+        $results = $responseArray['results'] ?? null;
+
+        // Check if any required fields are missing
+        $missingTopLevelFields = [];
+
+        // Basic falsy check is fine here. An empty `meta` would still be an error
+        if (!$meta) {
+            $missingTopLevelFields[] = 'meta';
+        }
+
+        // Specifically checking for null, because an empty results array is a valid response
+        if ($results === null) {
+            $missingTopLevelFields[] = 'results';
+        }
+
+        // We were missing one or more required top level fields
+        if ($missingTopLevelFields) {
+            throw new Exception('Missing required top level fields: %s', implode(', ', $missingTopLevelFields));
+        }
+
+        // We expect every search to contain a value for `request_id`
+        $requestId = $meta['request_id'] ?? null;
+
+        if (!$requestId) {
+            throw new Exception('Expected value for meta.request_id');
+        }
+
+        $engineName = $meta['engine']['name'] ?? null;
+
+        if (!$engineName) {
+            throw new Exception('Expected value for meta.engine.name');
+        }
+
+        // We expect every search to contain pagination results, even if there is only 1 page of 0 results
+        $pagination = $meta['page'] ?? null;
+
+        // Ensure we have pagination results
+        if (!$pagination) {
+            throw new Exception('Missing array structure for meta.page in Elastic search response');
+        }
+
+        $missingPaginationFields = [];
+        $expectedPagination = [
+            'current',
+            'size',
+            'total_pages',
+            'total_results'
+        ];
+
+        foreach ($expectedPagination as $expectedKey) {
+            if (!array_key_exists($expectedKey, $pagination)) {
+                $missingPaginationFields[] = $expectedKey;
+            }
+        }
+
+        if ($missingPaginationFields) {
+            throw new Exception('Missing required pagination fields: %s', implode(', ', $missingTopLevelFields));
+        }
     }
 
     private static function processMetaData(Results $results, Response $response): void
@@ -65,12 +144,20 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    private static function processRecords(Results $results, Response $response): void
+    private static function processRecords(Results $results, string $query, Response $response): void
     {
         $responseArray = $response->asArray();
 
         if (!array_key_exists('results', $responseArray)) {
             throw new Exception('Elastic Response contained to results array');
+        }
+
+        $requestId = $responseArray['meta']['request_id'] ?? null;
+        $engineName = $responseArray['meta']['engine']['name'] ?? null;
+
+        // Shouldn't ever be null, since we passed the validation step which requires these fields
+        if (!$requestId || !$engineName) {
+            throw new Exception('Expected value for meta.request_id and meta.engine.name');
         }
 
         foreach ($responseArray['results'] as $result) {
@@ -86,6 +173,20 @@ class ResultsProcessor
 
                 /** @see Record::__set() */
                 $result->{$formattedFieldName} = $field;
+            }
+
+            if (AnalyticsMiddleware::config()->get('enable_analytics')) {
+                // This field should always be there, as it's the default ID field in Elastic. We won't break stuff
+                // if it isn't there though - better that search works without analytics
+                $documentId = $result['id']['raw'] ?? null;
+
+                $analyticsData = AnalyticsData::create();
+                $analyticsData->setQuery($query);
+                $analyticsData->setEngineName($engineName);
+                $analyticsData->setDocumentId($documentId);
+                $analyticsData->setRequestId($requestId);
+
+                $record->setAnalyticsData($analyticsData);
             }
 
             $results->addRecord($record);

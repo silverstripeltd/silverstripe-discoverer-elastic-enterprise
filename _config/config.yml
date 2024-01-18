@@ -10,7 +10,3 @@ SilverStripe\Core\Injector\Injector:
       host: '`ENTERPRISE_SEARCH_ENDPOINT`'
       token: '`ENTERPRISE_SEARCH_API_SEARCH_KEY`'
       http_client: '%$GuzzleHttp\Client'
-
-SilverStripe\ElasticAppSearch\Service\AppSearchService:
-  # Sets the index variant value. If using the silverstripe-search-service module, this must be the same as what you use for that (e.g. `ENTERPRISE_SEARCH_ENGINE_PREFIX` or `APP_SEARCH_ENGINE_PREFIX`)
-  index_variant: '`ENTERPRISE_SEARCH_ENGINE_PREFIX`'
