@@ -18,8 +18,18 @@ class ClientFactory implements Factory
         $token = $params['token'] ?? null;
         $httpClient = $params['http_client'] ?? null;
 
-        if (!$host || !$token) {
-            throw new Exception('ENTERPRISE_SEARCH_ENDPOINT and ENTERPRISE_SEARCH_API_KEY are required');
+        $missingEnvVars = [];
+
+        if (!$host) {
+            $missingEnvVars[] = 'ENTERPRISE_SEARCH_ENDPOINT';
+        }
+
+        if (!$host) {
+            $missingEnvVars[] = 'ENTERPRISE_SEARCH_API_KEY';
+        }
+
+        if ($missingEnvVars) {
+            throw new Exception(sprintf('Required ENV vars missing: %s', implode(', ', $missingEnvVars)));
         }
 
         if (!$httpClient) {
@@ -34,6 +44,7 @@ class ClientFactory implements Factory
             'enterprise-search' => [
                 'token' => $token,
             ],
+            'client' => $httpClient,
         ];
 
         return new Client($config);

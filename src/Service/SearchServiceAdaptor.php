@@ -9,6 +9,7 @@ use Elastic\EnterpriseSearch\Client;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Core\Environment;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Search\Analytics\AnalyticsData;
 use SilverStripe\Search\Query\Query;
 use SilverStripe\Search\Service\Results\Results;
@@ -19,6 +20,8 @@ use Throwable;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 {
+
+    use Injectable;
 
     private ?Client $client = null;
 
@@ -42,22 +45,26 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
     /**
      * @throws Exception
      */
-    public function search(Query $query, ?string $indexName = null): Results
+    public function search(Query $query, string $indexName): Results
     {
-        $params = QueryParamsProcessor::singleton()->getQueryParams($query);
-        $engine = $this->environmentizeIndex($indexName);
-        $request = new Search($engine, $params);
         // Instantiate our Results class with empty data. This will still be returned if there is an Exception during
         // communication with Elastic (so that the page doesn't seriously break)
         $results = Results::create($query);
 
         try {
+            $params = QueryParamsProcessor::singleton()->getQueryParams($query);
+            $engine = $this->environmentizeIndex($indexName);
+            $request = new Search($engine, $params);
             $response = $this->client->appSearch()->search($request);
 
             ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
+            // If we got this far, then the request was a success
+            $results->setSuccess(true);
         } catch (Throwable $e) {
             // Log the error without breaking the page
             $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
+            // Our request was not a success
+            $results->setSuccess(false);
         } finally {
             return $results;
         }
