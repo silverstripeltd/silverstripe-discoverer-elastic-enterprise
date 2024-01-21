@@ -1,16 +1,18 @@
 {
-    "name": "silverstripeltd/silverstripe-search-elastic",
-    "description": "A plugin module for silverstripeltd/silverstripe-search that provides integration for Elastic",
+    "name": "silverstripeltd/silverstripe-search-elastic-enterprise",
+    "description": "A plugin module for silverstripeltd/silverstripe-search that provides integration for Elastic Enterprise Search",
     "type": "silverstripe-vendormodule",
     "license": "proprietary",
-    "homepage": "https://github.com/silverstripeltd/silverstripe-search-elastic",
+    "homepage": "https://github.com/silverstripeltd/silverstripe-search-elastic-enterprise",
     "authors": [],
     "keywords": [
         "Silverstripe",
         "Silverstripe CMS",
         "Search",
         "Elastic",
-        "Elastic Search"
+        "Elastic Search",
+        "Elastic Enterprise",
+        "Elastic Enterprise Search"
     ],
     "require": {
         "php": "^8.1",

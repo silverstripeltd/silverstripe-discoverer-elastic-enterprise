@@ -77,13 +77,18 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         $requestId = $analyticsData->getRequestId();
         $engineName = $analyticsData->getEngineName();
 
-        $params = new ClickParams($query, $documentId);
+        try {
+            $params = new ClickParams($query, $documentId);
 
-        if ($requestId) {
-            $params->request_id = $requestId;
+            if ($requestId) {
+                $params->request_id = $requestId;
+            }
+
+            $this->client->appSearch()->logClickthrough(new LogClickthrough($engineName, $params));
+        } catch (Throwable $e) {
+            // Log the error without breaking the page
+            $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
         }
-
-        $this->client->appSearch()->logClickthrough(new LogClickthrough($engineName, $params));
     }
 
     private function environmentizeIndex(string $indexName): string
