@@ -7,32 +7,36 @@ use Elastic\EnterpriseSearch\AppSearch\Request\Search;
 use Elastic\EnterpriseSearch\AppSearch\Schema\ClickParams;
 use Elastic\EnterpriseSearch\Client;
 use Exception;
+use Psr\Log\LoggerInterface;
 use SilverStripe\Core\Environment;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Search\Analytics\AnalyticsData;
 use SilverStripe\Search\Query\Query;
 use SilverStripe\Search\Service\Results\Results;
 use SilverStripe\Search\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
 use SilverStripe\SearchElastic\Processors\QueryParamsProcessor;
 use SilverStripe\SearchElastic\Processors\ResultsProcessor;
+use Throwable;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 {
 
     private ?Client $client = null;
 
+    private ?LoggerInterface $logger = null;
+
     private static array $dependencies = [
         'client' => '%$' . Client::class,
+        'logger' => '%$' . LoggerInterface::class . '.errorhandler',
     ];
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
 
     public function setClient(?Client $client): void
     {
         $this->client = $client;
+    }
+
+    public function setLogger(?LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -40,12 +44,23 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
      */
     public function search(Query $query, ?string $indexName = null): Results
     {
-        $params = QueryParamsProcessor::getQueryParams($query);
+        $params = QueryParamsProcessor::singleton()->getQueryParams($query);
         $engine = $this->environmentizeIndex($indexName);
         $request = new Search($engine, $params);
-        $response = $this->client->appSearch()->search($request);
+        // Instantiate our Results class with empty data. This will still be returned if there is an Exception during
+        // communication with Elastic (so that the page doesn't seriously break)
+        $results = Results::create($query);
 
-        return ResultsProcessor::getProcessedResults($query, $response);
+        try {
+            $response = $this->client->appSearch()->search($request);
+
+            ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
+        } catch (Throwable $e) {
+            // Log the error without breaking the page
+            $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
+        } finally {
+            return $results;
+        }
     }
 
     public function processAnalytics(AnalyticsData $analyticsData): void

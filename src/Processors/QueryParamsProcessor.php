@@ -6,6 +6,7 @@ use Elastic\EnterpriseSearch\AppSearch\Schema\PaginationResponseObject;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchFields;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchRequestParams;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Search\Query\Filter\Criteria;
 use SilverStripe\Search\Query\Query;
 use stdClass;
@@ -13,7 +14,9 @@ use stdClass;
 class QueryParamsProcessor
 {
 
-    public static function getQueryParams(Query $query): SearchRequestParams
+    use Injectable;
+
+    public function getQueryParams(Query $query): SearchRequestParams
     {
         $params = new SearchRequestParams($query->getQueryString());
 
@@ -51,7 +54,7 @@ class QueryParamsProcessor
         return $params;
     }
 
-    private static function getFacetsFromQuery(Query $query): ?SimpleObject
+    private function getFacetsFromQuery(Query $query): ?SimpleObject
     {
         if (!$query->getFacetCollection()->getFacets()) {
             return null;
@@ -60,7 +63,7 @@ class QueryParamsProcessor
         return $query->getFacetCollection()->getPreparedFacets();
     }
 
-    private static function getFiltersFromQuery(Query $query): ?SimpleObject
+    private function getFiltersFromQuery(Query $query): ?SimpleObject
     {
         $filterCriteria = $query->getFilter();
         $clauses = $filterCriteria->getClauses();
@@ -92,7 +95,7 @@ class QueryParamsProcessor
         return $filters;
     }
 
-    private static function getPaginationFromQuery(Query $query): ?PaginationResponseObject
+    private function getPaginationFromQuery(Query $query): ?PaginationResponseObject
     {
         if (!$query->hasPagination()) {
             return null;
@@ -105,7 +108,7 @@ class QueryParamsProcessor
         return $pagination;
     }
 
-    private static function getResultFieldsFromQuery(Query $query): ?SimpleObject
+    private function getResultFieldsFromQuery(Query $query): ?SimpleObject
     {
         if (!$query->getResultFields()) {
             return null;
@@ -141,7 +144,7 @@ class QueryParamsProcessor
         return $resultFields;
     }
 
-    private static function getSearchFieldsFromQuery(Query $query): ?SearchFields
+    private function getSearchFieldsFromQuery(Query $query): ?SearchFields
     {
         if (!$query->getSearchFields()) {
             return null;
@@ -160,7 +163,7 @@ class QueryParamsProcessor
         return $searchFields;
     }
 
-    private static function getSortFromQuery(Query $query): array
+    private function getSortFromQuery(Query $query): array
     {
         $processedSort = [];
 

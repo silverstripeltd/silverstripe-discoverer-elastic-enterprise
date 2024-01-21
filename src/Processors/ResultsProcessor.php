@@ -2,13 +2,12 @@
 
 namespace SilverStripe\SearchElastic\Processors;
 
-use Elastic\EnterpriseSearch\Response\Response;
 use Exception;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Search\Analytics\AnalyticsData;
 use SilverStripe\Search\Analytics\AnalyticsMiddleware;
-use SilverStripe\Search\Query\Query;
 use SilverStripe\Search\Service\Results\Facet;
 use SilverStripe\Search\Service\Results\FacetData;
 use SilverStripe\Search\Service\Results\Field;
@@ -19,6 +18,7 @@ class ResultsProcessor
 {
 
     use Configurable;
+    use Injectable;
 
     /**
      * Elastic has a default limit of handling 100 pages. If you request a page beyond this limit
@@ -34,32 +34,29 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    public static function getProcessedResults(Query $query, Response $response): Results
+    public function getProcessedResults(Results $results, array $response): void
     {
+        // Check that we have all critical fields in our Elastic response
         self::validateResponse($response);
-
-        $results = Results::create($query);
-
+        // Start populating our Results object with data from our Elastic response
         self::processMetaData($results, $response);
         self::processRecords($results, $response);
         self::processFacets($results, $response);
-
-        return $results;
     }
 
-    private static function validateResponse(Response $response): void
+    /**
+     * @throws Exception
+     */
+    private function validateResponse(array $response): void
     {
-        $responseArray = $response->asArray();
-
         // If any errors are present, then let's throw and track what they were
-        if (array_key_exists('errors', $responseArray)) {
-            throw new Exception(sprintf('Elastic response contained errors: %s', json_encode($responseArray['errors'])));
+        if (array_key_exists('errors', $response)) {
+            throw new Exception(sprintf('Elastic response contained errors: %s', json_encode($response['errors'])));
         }
 
         // The top level fields that we expect to receive from Elastic for each search
-        $meta = $responseArray['meta'] ?? null;
-        $results = $responseArray['results'] ?? null;
-
+        $meta = $response['meta'] ?? null;
+        $results = $response['results'] ?? null;
         // Check if any required fields are missing
         $missingTopLevelFields = [];
 
@@ -75,7 +72,7 @@ class ResultsProcessor
 
         // We were missing one or more required top level fields
         if ($missingTopLevelFields) {
-            throw new Exception('Missing required top level fields: %s', implode(', ', $missingTopLevelFields));
+            throw new Exception(sprintf('Missing required top level fields: %s', implode(', ', $missingTopLevelFields)));
         }
 
         // We expect every search to contain a value for `request_id`
@@ -95,7 +92,7 @@ class ResultsProcessor
         $pagination = $meta['page'] ?? null;
 
         // Ensure we have pagination results
-        if (!$pagination) {
+        if (!is_array($pagination)) {
             throw new Exception('Missing array structure for meta.page in Elastic search response');
         }
 
@@ -114,24 +111,22 @@ class ResultsProcessor
         }
 
         if ($missingPaginationFields) {
-            throw new Exception('Missing required pagination fields: %s', implode(', ', $missingTopLevelFields));
+            throw new Exception(sprintf('Missing required pagination fields: %s', implode(', ', $missingPaginationFields)));
         }
     }
 
-    private static function processMetaData(Results $results, Response $response): void
+    private function processMetaData(Results $results, array $response): void
     {
-        $responseArray = $response->asArray();
-
-        $pageSize = $responseArray['meta']['page']['size'] ?? 0;
+        $pageSize = $response['meta']['page']['size'] ?? 0;
         $pageLimit = self::config()->get('elastic_page_limit') ?? 0;
         $resultsLimit = self::config()->get('elastic_results_limit') ?? 0;
-        $currentPage = $responseArray['meta']['page']['current'] ?? 1;
+        $currentPage = $response['meta']['page']['current'] ?? 1;
 
         // Calculate the total paginated results that can be handled, taking into account the default elastic limits.
         // The page size also needs to be considered here so that we only handle the number of results rendered
         // on the first 100 pages (elastic_page_limit * $pageSize).
         $totalResults = min([
-            $responseArray['meta']['page']['total_results'] ?? 0,
+            $response['meta']['page']['total_results'] ?? 0,
             $pageLimit * $pageSize,
             $resultsLimit
         ]);
@@ -146,25 +141,35 @@ class ResultsProcessor
     /**
      * @throws Exception
      */
-    private static function processRecords(Results $results, Response $response): void
+    private function processRecords(Results $results, array $response): void
     {
-        $responseArray = $response->asArray();
-
-        if (!array_key_exists('results', $responseArray)) {
+        if (!array_key_exists('results', $response)) {
             throw new Exception('Elastic Response contained to results array');
         }
 
         // Only used if analytics are enabled
-        $requestId = $responseArray['meta']['request_id'] ?? null;
-        $engineName = $responseArray['meta']['engine']['name'] ?? null;
-        $queryString = $results->getQuery()->getQueryString();
+        $requestId = $response['meta']['request_id'] ?? null;
+        $engineName = $response['meta']['engine']['name'] ?? null;
+        // Check if any required fields are missing
+        $missingRequiredFields = [];
 
-        // Shouldn't ever be null, since we passed the validation step which requires these fields
-        if (!$requestId || !$engineName) {
-            throw new Exception('Expected value for meta.request_id and meta.engine.name');
+        if (!$requestId) {
+            $missingRequiredFields[] = 'meta.request_id';
         }
 
-        foreach ($responseArray['results'] as $result) {
+        if (!$engineName) {
+            $missingRequiredFields[] = 'meta.engine.name';
+        }
+
+        // Shouldn't ever be null, since we passed the validation step which requires these fields, but it's best to
+        // double-check
+        if ($missingRequiredFields) {
+            throw new Exception(sprintf('Expected values for: %s', implode(', ', $missingRequiredFields)));
+        }
+
+        $queryString = $results->getQuery()->getQueryString();
+
+        foreach ($response['results'] as $result) {
             $record = Record::create();
 
             foreach ($result as $fieldName => $valueFields) {
@@ -197,10 +202,9 @@ class ResultsProcessor
         }
     }
 
-    private static function processFacets(Results $results, Response $response): void
+    private function processFacets(Results $results, array $response): void
     {
-        $responseArray = $response->asArray();
-        $facets = $responseArray['facets'] ?? null;
+        $facets = $response['facets'] ?? null;
 
         if (!is_array($facets)) {
             return;
