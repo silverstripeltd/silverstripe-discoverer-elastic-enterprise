@@ -44,7 +44,7 @@ class SearchServiceAdaptorTest extends SapphireTest
         // Instantiate a new Query
         $query = Query::create('query string');
         // Set pagination purely so that we can check that our query params are applied
-        $query->setPagination(10, 2);
+        $query->setPagination(10, 20);
         // Instantiate our service
         $service = SearchService::create($query);
         // Perform our search against the 'main' index
@@ -53,8 +53,8 @@ class SearchServiceAdaptorTest extends SapphireTest
         $this->assertTrue($results->isSuccess());
         $this->assertCount(2, $results->getRecords());
         // Check that those query params were set as part of our search
-        $this->assertEquals(10, $results->getQuery()->getPageSize());
-        $this->assertEquals(2, $results->getQuery()->getPageNum());
+        $this->assertEquals(10, $results->getQuery()->getPaginationLimit());
+        $this->assertEquals(20, $results->getQuery()->getPaginationOffset());
     }
 
     public function testSearchFailure(): void

@@ -101,9 +101,16 @@ class QueryParamsProcessor
             return null;
         }
 
+        // The number of records that we will limit to
+        $limit = $query->getPaginationLimit();
+        // The offset number of records
+        $offset = $query->getPaginationOffset();
+        // Elastic uses page numbers instead of offset, so we need to convert. Note: Offset starts at 0
+        $pageNum = (int) ceil($offset / $limit) + 1;
+
         $pagination = new PaginationResponseObject();
-        $pagination->size = $query->getPageSize();
-        $pagination->current = $query->getPageNum();
+        $pagination->size = $limit;
+        $pagination->current = $pageNum;
 
         return $pagination;
     }

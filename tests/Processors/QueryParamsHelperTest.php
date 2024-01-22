@@ -124,13 +124,22 @@ class QueryParamsHelperTest extends SapphireTest
         $this->assertNull($reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query));
 
         // Set pagination and retest
-        $query->setPagination(10, 2);
+        $query->setPagination(10, 0);
 
         /** @var PaginationResponseObject $pagination */
         $pagination = $reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query);
 
         $this->assertEquals(10, $pagination->size);
-        $this->assertEquals(2, $pagination->current);
+        $this->assertEquals(1, $pagination->current);
+
+        // Set pagination and retest. Note: offset starts at 0, so an offset of 20 is page 3, not page 2
+        $query->setPagination(10, 20);
+
+        /** @var PaginationResponseObject $pagination */
+        $pagination = $reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query);
+
+        $this->assertEquals(10, $pagination->size);
+        $this->assertEquals(3, $pagination->current);
     }
 
     public function testGetResultFieldsFromQuery(): void
@@ -260,7 +269,7 @@ class QueryParamsHelperTest extends SapphireTest
         $query->addSearchField('field2');
         $query->addSort('field3');
         $query->filter('field1', 'value1', Criterion::EQUAL);
-        $query->setPagination(10, 2);
+        $query->setPagination(10, 20);
 
         $params = QueryParamsProcessor::singleton()->getQueryParams($query);
 

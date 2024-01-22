@@ -217,19 +217,19 @@ class ResultsProcessorTest extends SapphireTest
         $this->assertNull($record->getAnalyticsData());
         // Start checking our fields are as expected
         $this->assertEquals('Search term highlighted in title: Record 1', $title->getRaw());
-        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in title: Record 1', $title->getSnippet());
+        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in title: Record 1', $title->getFormatted());
         $this->assertEquals('<em>Search</em> <em>term</em> highlighted in title: Record 1', $title->forTemplate());
         $this->assertEquals('Search term highlighted in description: Record 1', $description->getRaw());
-        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in description: Record 1', $description->getSnippet());
+        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in description: Record 1', $description->getFormatted());
         $this->assertEquals('<em>Search</em> <em>term</em> highlighted in description: Record 1', $description->forTemplate());
         $this->assertEquals('app_pages_blockpage_1', $id->getRaw());
-        $this->assertNull($id->getSnippet());
+        $this->assertNull($id->getFormatted());
         $this->assertEquals('app_pages_blockpage_1', $id->forTemplate());
         $this->assertEquals('1', $recordId->getRaw());
-        $this->assertNull($recordId->getSnippet());
+        $this->assertNull($recordId->getFormatted());
         $this->assertEquals('1', $recordId->forTemplate());
         $this->assertEquals('App\\Pages\\BlockPage', $sourceClass->getRaw());
-        $this->assertNull($recordId->getSnippet());
+        $this->assertNull($recordId->getFormatted());
         $this->assertEquals('App\\Pages\\BlockPage', $sourceClass->forTemplate());
     }
 
