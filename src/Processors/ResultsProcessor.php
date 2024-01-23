@@ -174,11 +174,12 @@ class ResultsProcessor
 
             foreach ($result as $fieldName => $valueFields) {
                 // Convert snake_case (Elastic's field name format) to PascalCase (Silverstripe's field name format)
-                $formattedFieldName = $this->standardiseFieldName($fieldName);
+                $formattedFieldName = $this->getConvertedFieldName($fieldName);
 
-                $field = Field::create();
-                $field->setRaw($valueFields['raw'] ?? null);
-                $field->setFormatted($valueFields['snippet'] ?? null);
+                $raw = $valueFields['raw'] ?? null;
+                $snippet = $valueFields['snippet'] ?? null;
+
+                $field = Field::create($raw, $snippet);
 
                 /** @see Record::__set() */
                 $record->{$formattedFieldName} = $field;
@@ -231,7 +232,7 @@ class ResultsProcessor
         }
     }
 
-    private function standardiseFieldName(string $fieldName): string
+    private function getConvertedFieldName(string $fieldName): string
     {
         return str_replace('_', '', ucwords($fieldName, '_'));
     }
