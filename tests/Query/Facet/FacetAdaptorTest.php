@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Query\Facet;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Query\Facet;
 
 use SilverStripe\Dev\SapphireTest;
 

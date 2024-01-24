@@ -1,17 +1,17 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Processors;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Processors;
 
 use ReflectionMethod;
 use SilverStripe\Core\Environment;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Search\Analytics\AnalyticsData;
-use SilverStripe\Search\Analytics\AnalyticsMiddleware;
-use SilverStripe\Search\Query\Query;
-use SilverStripe\Search\Service\Results\Field;
-use SilverStripe\Search\Service\Results\Record;
-use SilverStripe\Search\Service\Results\Results;
-use SilverStripe\SearchElastic\Processors\ResultsProcessor;
+use SilverStripe\Discoverer\Analytics\AnalyticsData;
+use SilverStripe\Discoverer\Analytics\AnalyticsMiddleware;
+use SilverStripe\Discoverer\Query\Query;
+use SilverStripe\Discoverer\Service\Results\Field;
+use SilverStripe\Discoverer\Service\Results\Record;
+use SilverStripe\Discoverer\Service\Results\Results;
+use SilverStripe\DiscovererElasticEnterprise\Processors\ResultsProcessor;
 
 class ResultsProcessorTest extends SapphireTest
 {

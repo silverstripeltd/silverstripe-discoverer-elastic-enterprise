@@ -1,9 +1,9 @@
 {
-    "name": "silverstripeltd/silverstripe-search-elastic-enterprise",
-    "description": "A plugin module for silverstripeltd/silverstripe-search that provides integration for Elastic Enterprise Search",
+    "name": "silverstripeltd/discoverer-elastic-enterprise",
+    "description": "A plugin module for silverstripeltd/discoverer that provides integration for Elastic Enterprise and App Search",
     "type": "silverstripe-vendormodule",
     "license": "proprietary",
-    "homepage": "https://github.com/silverstripeltd/silverstripe-search-elastic-enterprise",
+    "homepage": "https://github.com/silverstripeltd/discoverer-elastic-enterprise",
     "authors": [],
     "keywords": [
         "Silverstripe",
@@ -18,7 +18,7 @@
         "php": "^8.1",
         "silverstripe/framework": "^5",
         "elastic/enterprise-search": "^8.10",
-        "silverstripeltd/silverstripe-search": "dev-main",
+        "silverstripeltd/discoverer": "dev-main",
         "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
@@ -28,13 +28,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:silverstripeltd/silverstripe-search.git"
+            "url": "git@github.com:silverstripeltd/discoverer.git"
         }
     ],
     "autoload": {
         "psr-4": {
-            "SilverStripe\\SearchElastic\\": "src/",
-            "SilverStripe\\SearchElastic\\Tests\\": "tests/"
+            "SilverStripe\\DiscovererElasticEnterprise\\": "src/",
+            "SilverStripe\\DiscovererElasticEnterprise\\Tests\\": "tests/"
         }
     },
     "config": {

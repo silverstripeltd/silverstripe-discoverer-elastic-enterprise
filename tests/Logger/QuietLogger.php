@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Logger;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Logger;
 
 use Psr\Log\LoggerInterface;
 use Stringable;

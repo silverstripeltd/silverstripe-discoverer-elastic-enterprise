@@ -1,12 +1,12 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Service;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Service;
 
 use Elastic\EnterpriseSearch\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Search\Service\SearchService;
-use SilverStripe\SearchElastic\Service\ClientFactory;
+use SilverStripe\Discoverer\Service\SearchService;
+use SilverStripe\DiscovererElasticEnterprise\Service\ClientFactory;
 
 class ClientFactoryTest extends SapphireTest
 {

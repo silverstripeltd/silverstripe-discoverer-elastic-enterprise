@@ -1,18 +1,18 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Processors;
+namespace SilverStripe\DiscovererElasticEnterprise\Processors;
 
 use Exception;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Search\Analytics\AnalyticsData;
-use SilverStripe\Search\Analytics\AnalyticsMiddleware;
-use SilverStripe\Search\Service\Results\Facet;
-use SilverStripe\Search\Service\Results\FacetData;
-use SilverStripe\Search\Service\Results\Field;
-use SilverStripe\Search\Service\Results\Record;
-use SilverStripe\Search\Service\Results\Results;
+use SilverStripe\Discoverer\Analytics\AnalyticsData;
+use SilverStripe\Discoverer\Analytics\AnalyticsMiddleware;
+use SilverStripe\Discoverer\Service\Results\Facet;
+use SilverStripe\Discoverer\Service\Results\FacetData;
+use SilverStripe\Discoverer\Service\Results\Field;
+use SilverStripe\Discoverer\Service\Results\Record;
+use SilverStripe\Discoverer\Service\Results\Results;
 
 class ResultsProcessor
 {

@@ -2,16 +2,16 @@
 Name: search-elastic-config
 ---
 SilverStripe\Core\Injector\Injector:
-  SilverStripe\Search\Query\Facet\FacetAdaptor:
-    class: SilverStripe\SearchElastic\Query\Facet\FacetAdaptor
-  SilverStripe\Search\Query\Filter\CriteriaAdaptor:
-    class: SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor
-  SilverStripe\Search\Query\Filter\CriterionAdaptor:
-    class: SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor
-  SilverStripe\Search\Service\SearchServiceAdaptor:
-    class: SilverStripe\SearchElastic\Service\SearchServiceAdaptor
+  SilverStripe\Discoverer\Query\Facet\FacetAdaptor:
+    class: SilverStripe\DiscovererElasticEnterprise\Query\Facet\FacetAdaptor
+  SilverStripe\Discoverer\Query\Filter\CriteriaAdaptor:
+    class: SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriteriaAdaptor
+  SilverStripe\Discoverer\Query\Filter\CriterionAdaptor:
+    class: SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriterionAdaptor
+  SilverStripe\Discoverer\Service\SearchServiceAdaptor:
+    class: SilverStripe\DiscovererElasticEnterprise\Service\SearchServiceAdaptor
   Elastic\EnterpriseSearch\Client:
-    factory: SilverStripe\SearchElastic\Service\ClientFactory
+    factory: SilverStripe\DiscovererElasticEnterprise\Service\ClientFactory
     constructor:
       host: '`ENTERPRISE_SEARCH_ENDPOINT`'
       token: '`ENTERPRISE_SEARCH_API_SEARCH_KEY`'

@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Service;
+namespace SilverStripe\DiscovererElasticEnterprise\Service;
 
 use Elastic\EnterpriseSearch\Client;
 use Exception;

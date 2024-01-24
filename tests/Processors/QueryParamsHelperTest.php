@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Processors;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Processors;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\PaginationResponseObject;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchFields;
@@ -8,19 +8,19 @@ use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use ReflectionMethod;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Search\Query\Facet\Facet;
-use SilverStripe\Search\Query\Facet\FacetAdaptor as FacetAdaptorInterface;
-use SilverStripe\Search\Query\Filter\Criteria;
-use SilverStripe\Search\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
-use SilverStripe\Search\Query\Filter\Criterion;
-use SilverStripe\Search\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
-use SilverStripe\Search\Query\Query;
-use SilverStripe\SearchElastic\Processors\QueryParamsProcessor;
-use SilverStripe\SearchElastic\Query\Facet\FacetAdaptor;
-use SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor;
-use SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor;
-use SilverStripe\SearchElastic\Tests\Query\Facet\FacetAdaptorTest;
-use SilverStripe\SearchElastic\Tests\Query\Filter\CriteriaAdaptorTest;
+use SilverStripe\Discoverer\Query\Facet\Facet;
+use SilverStripe\Discoverer\Query\Facet\FacetAdaptor as FacetAdaptorInterface;
+use SilverStripe\Discoverer\Query\Filter\Criteria;
+use SilverStripe\Discoverer\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
+use SilverStripe\Discoverer\Query\Filter\Criterion;
+use SilverStripe\Discoverer\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
+use SilverStripe\Discoverer\Query\Query;
+use SilverStripe\DiscovererElasticEnterprise\Processors\QueryParamsProcessor;
+use SilverStripe\DiscovererElasticEnterprise\Query\Facet\FacetAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriteriaAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriterionAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Tests\Query\Facet\FacetAdaptorTest;
+use SilverStripe\DiscovererElasticEnterprise\Tests\Query\Filter\CriteriaAdaptorTest;
 use stdClass;
 
 class QueryParamsHelperTest extends SapphireTest

@@ -1,4 +1,4 @@
-# silverstripeltd/silverstripe-search-elastic-enterprise
+# silverstripeltd/discoverer-elastic-enterprise
 
 ## Purpose
 
@@ -9,12 +9,12 @@ indices through Silverstripe controllers.
 
 We have two private modules that make up our Elastic Enterprise Search integration:
 
-* [Silverstripe Search](https://github.com/silverstripeltd/silverstripe-search)
+* [Silverstripe Search](https://github.com/silverstripeltd/discoverer)
   * This modules provides you with all of the Search service interfaces that you will interact with in your project
     code.
   * The goal of this module is to be provider agnostic, so if we (for example) switch from Elastic to Solr, you (as a
     developer), shouldn't have to change much about how your applications interacts with the Service itself.
-* [Silverstripe Search > Elastic Enterprise](https://github.com/silverstripeltd/silverstripe-search-elastic-enterprise)
+* [Silverstripe Search > Elastic Enterprise](https://github.com/silverstripeltd/discoverer-elastic-enterprise)
   * (This module), which provides the adaptors so that the the Service module can communicate with Elastic Enterprise
     Search APIs.
 
@@ -27,11 +27,11 @@ Add the following to your `composer.json`:
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:silverstripeltd/silverstripe-search.git"
+            "url": "git@github.com:silverstripeltd/discoverer.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:silverstripeltd/silverstripe-search-elastic-enterprise.git"
+            "url": "git@github.com:silverstripeltd/discoverer-elastic-enterprise.git"
         }
     ]
 }

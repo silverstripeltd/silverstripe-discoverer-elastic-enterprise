@@ -1,15 +1,15 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Query\Filter;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Query\Filter;
 
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Search\Query\Filter\Criteria;
-use SilverStripe\Search\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
-use SilverStripe\Search\Query\Filter\Criterion;
-use SilverStripe\Search\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
-use SilverStripe\SearchElastic\Query\Filter\CriteriaAdaptor;
-use SilverStripe\SearchElastic\Query\Filter\CriterionAdaptor;
+use SilverStripe\Discoverer\Query\Filter\Criteria;
+use SilverStripe\Discoverer\Query\Filter\CriteriaAdaptor as CriteriaAdaptorInterface;
+use SilverStripe\Discoverer\Query\Filter\Criterion;
+use SilverStripe\Discoverer\Query\Filter\CriterionAdaptor as CriterionAdaptorInterface;
+use SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriteriaAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriterionAdaptor;
 
 class CriteriaAdaptorTest extends SapphireTest
 {

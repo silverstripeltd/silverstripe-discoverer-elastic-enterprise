@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Service;
+namespace SilverStripe\DiscovererElasticEnterprise\Service;
 
 use Elastic\EnterpriseSearch\AppSearch\Request\LogClickthrough;
 use Elastic\EnterpriseSearch\AppSearch\Request\Search;
@@ -10,12 +10,12 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Search\Analytics\AnalyticsData;
-use SilverStripe\Search\Query\Query;
-use SilverStripe\Search\Service\Results\Results;
-use SilverStripe\Search\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
-use SilverStripe\SearchElastic\Processors\QueryParamsProcessor;
-use SilverStripe\SearchElastic\Processors\ResultsProcessor;
+use SilverStripe\Discoverer\Analytics\AnalyticsData;
+use SilverStripe\Discoverer\Query\Query;
+use SilverStripe\Discoverer\Service\Results\Results;
+use SilverStripe\Discoverer\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
+use SilverStripe\DiscovererElasticEnterprise\Processors\QueryParamsProcessor;
+use SilverStripe\DiscovererElasticEnterprise\Processors\ResultsProcessor;
 use Throwable;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface

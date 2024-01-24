@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Tests\Service;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Service;
 
 use Elastic\EnterpriseSearch\Client as ElasticClient;
 use GuzzleHttp\Client as GuzzleClient;
@@ -12,10 +12,10 @@ use ReflectionMethod;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Search\Query\Query;
-use SilverStripe\Search\Service\SearchService;
-use SilverStripe\SearchElastic\Service\SearchServiceAdaptor;
-use SilverStripe\SearchElastic\Tests\Logger\QuietLogger;
+use SilverStripe\Discoverer\Query\Query;
+use SilverStripe\Discoverer\Service\SearchService;
+use SilverStripe\DiscovererElasticEnterprise\Service\SearchServiceAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Tests\Logger\QuietLogger;
 
 class SearchServiceAdaptorTest extends SapphireTest
 {

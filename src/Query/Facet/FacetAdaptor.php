@@ -1,11 +1,11 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Query\Facet;
+namespace SilverStripe\DiscovererElasticEnterprise\Query\Facet;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
-use SilverStripe\Search\Query\Facet\Facet;
-use SilverStripe\Search\Query\Facet\FacetAdaptor as FacetAdaptorInterface;
-use SilverStripe\Search\Query\Facet\FacetCollection;
+use SilverStripe\Discoverer\Query\Facet\Facet;
+use SilverStripe\Discoverer\Query\Facet\FacetAdaptor as FacetAdaptorInterface;
+use SilverStripe\Discoverer\Query\Facet\FacetCollection;
 
 class FacetAdaptor implements FacetAdaptorInterface
 {

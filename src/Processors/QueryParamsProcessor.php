@@ -1,14 +1,14 @@
 <?php
 
-namespace SilverStripe\SearchElastic\Processors;
+namespace SilverStripe\DiscovererElasticEnterprise\Processors;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\PaginationResponseObject;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchFields;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchRequestParams;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Search\Query\Filter\Criteria;
-use SilverStripe\Search\Query\Query;
+use SilverStripe\Discoverer\Query\Filter\Criteria;
+use SilverStripe\Discoverer\Query\Query;
 use stdClass;
 
 class QueryParamsProcessor
