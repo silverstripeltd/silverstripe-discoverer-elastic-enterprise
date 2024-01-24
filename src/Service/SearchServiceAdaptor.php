@@ -28,7 +28,7 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
     private ?LoggerInterface $logger = null;
 
     private static array $dependencies = [
-        'client' => '%$' . Client::class,
+        'client' => '%$' . Client::class . '.searchClient',
         'logger' => '%$' . LoggerInterface::class . '.errorhandler',
     ];
 
