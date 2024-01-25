@@ -32,7 +32,7 @@ class SearchServiceAdaptorTest extends SapphireTest
         $this->assertEquals('elastic-main', $reflectionMethod->invoke($searchServiceAdaptor, 'main'));
     }
 
-    public function testSearch(): void
+    public function testSearchSuccess(): void
     {
         $headers = [
             'Content-Type' => 'application/json;charset=utf-8',

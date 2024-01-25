@@ -17,8 +17,8 @@
     "require": {
         "php": "^8.1",
         "silverstripe/framework": "^5",
-        "elastic/enterprise-search": "^8.10",
         "silverstripeltd/discoverer": "dev-main",
+        "elastic/enterprise-search": "^8.10",
         "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
