@@ -212,10 +212,11 @@ class ResultsProcessor
         }
 
         foreach ($facets as $property => $facetResults) {
-            foreach ($facetResults as $index => $facetResult) {
+            foreach ($facetResults as $facetResult) {
                 $facet = Facet::create();
                 $facet->setProperty($property);
-                $facet->setName($facetResult['name'] ?? $index);
+                $facet->setName($facetResult['name'] ?? null);
+                $facet->setType($facetResult['type'] ?? null);
 
                 foreach ($facetResult['data'] as $resultData) {
                     $facetData = FacetData::create();

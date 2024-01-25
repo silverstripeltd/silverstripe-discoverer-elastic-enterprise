@@ -6,6 +6,7 @@ use Elastic\EnterpriseSearch\AppSearch\Request\LogClickthrough;
 use Elastic\EnterpriseSearch\AppSearch\Request\Search;
 use Elastic\EnterpriseSearch\AppSearch\Schema\ClickParams;
 use Elastic\EnterpriseSearch\Client;
+use Elastic\EnterpriseSearch\Exception\ClientErrorResponseException;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Core\Environment;
@@ -60,6 +61,12 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
             ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
             // If we got this far, then the request was a success
             $results->setSuccess(true);
+        } catch (ClientErrorResponseException $e) {
+            $errors = (string) $e->getResponse()->getBody();
+            // Log the error without breaking the page
+            $this->logger->error(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
+            // Our request was not a success
+            $results->setSuccess(false);
         } catch (Throwable $e) {
             // Log the error without breaking the page
             $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
