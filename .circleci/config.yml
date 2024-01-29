@@ -268,39 +268,6 @@ commands:
             fi
             vendor/bin/phpunit --verbose $PHPUNITARGS
 
-  #
-  # Send the coverage reports to codecov.io
-  #
-  # Requires $CODECOV_TOKEN variable set in CircleCI
-  #
-  # CODECOV_TOKEN
-  # - Creation:
-  #   a) Login to GitHub as a user with admin access to the repo (PD/PL/etc)
-  #   b) Login to CodeCov.io via GitHub OAuth
-  #   c) https://app.codecov.io/gh/silverstripeltd
-  #   d) Find (or add) the repository that you want tracked. You might need to allow permissions:
-  #      - https://github.com/organizations/silverstripeltd/settings/installations/17904772
-  #      - (If that link stops working: Github SS Ltd > Settings > Github Apps > Codecov
-  #      - Update the list in "Only selected repositories" to include your repo
-  #   d) Generate token: CODECOV_TOKEN
-  # - Set token:
-  #   a) https://circleci.com/gh/$REPO_NAME/environment-variables
-  #   b) Name = CODECOV_TOKEN, Token = Generated from step above
-  #
-  codecov:
-    description: Report coverage
-    steps:
-      - check_env_vars:
-          service: Codecov
-          env_vars: CODECOV_TOKEN
-      - run:
-          name: Sending coverage to codecov.io
-          command: |
-            curl -s https://codecov.io/bash > codecov;
-            VERSION=$(grep 'VERSION=\".*\"' codecov | cut -d'"' -f2);
-            shasum -a 512 -c  <(curl -s https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA512SUM | grep codecov);
-            bash <(cat codecov) || echo "Codecov submission failed, check https://status.codecov.io"
-
 #
 # PIPELINE JOBS
 # -------------
@@ -335,9 +302,6 @@ jobs:
 
       # run test suites
       - php-tests
-
-      # Send coverage reports
-      - codecov
 
       - store_artifacts:
           path: coverage
