@@ -101,7 +101,7 @@ class SearchServiceAdaptorTest extends SapphireTest
         // Instantiate the Elastic Client that we'll use (that in turn uses the GuzzleClient with the MockHandler)
         $elasticClient = new ElasticClient($config);
 
-        Injector::inst()->registerService($elasticClient, ElasticClient::class);
+        Injector::inst()->registerService($elasticClient, ElasticClient::class . '.searchClient');
         // Add our quiet logger, so that our API calls don't create any noise in our test report
         Injector::inst()->registerService(new QuietLogger(), LoggerInterface::class . '.errorhandler');
     }
