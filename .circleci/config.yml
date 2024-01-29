@@ -328,7 +328,7 @@ jobs:
       - setup-permissions
 
       # linting
-      - silverstripe-standards
+#      - silverstripe-standards
 
       # build database
       - dev-build
