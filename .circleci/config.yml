@@ -111,29 +111,12 @@ commands:
   dependencies:
     description: Install dependencies
     steps:
-      # Composer Cache + Installation
-      - restore_cache:
-          keys:
-            - v1-composer-{{ checksum "composer.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-composer-
-      # If your project is running forks, you might need to add a Github Token in order to avoid rate limiting.
-      # You should request your tech lead created/updates a Service Account for your project. A Token can then be
-      # created for that Service Account and added to the Project Settings in CircleCI as an ENV Var
-      # - run: composer config --global github-oauth.github.com $GITHUB_TOKEN
-      # prefer source composer install to make test files available
       - run:
           name: Installing composer dependencies
           command: |
             composer install --prefer-dist --no-interaction
             # always expose: cached content is never exposed automatically
             composer vendor-expose
-      # Save all dependencies to cache
-      - save_cache:
-          key: v1-composer-{{ checksum "composer.lock" }}
-          paths:
-            - vendor
-            - resources
 
   #
   # Set the correct PHP version, as defined in the pipeline parameters
