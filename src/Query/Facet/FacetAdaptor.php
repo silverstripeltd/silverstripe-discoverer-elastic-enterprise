@@ -23,13 +23,13 @@ class FacetAdaptor implements FacetAdaptorInterface
         $facets = new SimpleObject();
 
         foreach ($facetCollection->getFacets() as $facet) {
-            $property = $facet->getProperty();
+            $fieldName = $facet->getFieldName();
 
-            if (!property_exists($facets, $property)) {
-                $facets->{$property} = [];
+            if (!property_exists($facets, $fieldName)) {
+                $facets->{$fieldName} = [];
             }
 
-            $facets->{$property}[] = $this->prepareFacet($facet);
+            $facets->{$fieldName}[] = $this->prepareFacet($facet);
         }
 
         return $facets;

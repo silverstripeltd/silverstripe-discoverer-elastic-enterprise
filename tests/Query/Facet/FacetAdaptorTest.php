@@ -17,7 +17,7 @@ class FacetAdaptorTest extends SapphireTest
         $adaptor = new FacetAdaptor();
 
         $facet = Facet::create();
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
         $facet->addRange(1, 2, 'test1');
         $facet->addRange(3);
         $facet->addRange(to: 4);
@@ -52,7 +52,7 @@ class FacetAdaptorTest extends SapphireTest
         $adaptor = new FacetAdaptor();
 
         $facet = Facet::create();
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
 
         /** @see FacetAdaptor::prepareRanges() */
         $reflectionMethod = new ReflectionMethod($adaptor, 'prepareRanges');
@@ -66,7 +66,7 @@ class FacetAdaptorTest extends SapphireTest
         $adaptor = new FacetAdaptor();
 
         $facet = Facet::create();
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
         // An empty ranges
         $facet->addRange();
         $facet->addRange();
@@ -83,7 +83,7 @@ class FacetAdaptorTest extends SapphireTest
         $adaptor = new FacetAdaptor();
 
         $facet = Facet::create();
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
         $facet->setName('facetName1');
         $facet->setLimit(3);
 
@@ -105,7 +105,7 @@ class FacetAdaptorTest extends SapphireTest
         $adaptor = new FacetAdaptor();
 
         $facet = Facet::create();
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
         $facet->setName('facetName1');
         $facet->addRange(1, 2, 'test1');
 
@@ -134,12 +134,12 @@ class FacetAdaptorTest extends SapphireTest
 
         // Creating two facets that target the same field name
         $facetOne = Facet::create();
-        $facetOne->setProperty('fieldName1');
+        $facetOne->setFieldName('fieldName1');
         $facetTwo = Facet::create();
-        $facetTwo->setProperty('fieldName1');
+        $facetTwo->setFieldName('fieldName1');
         // And one facet targeting a different field name
         $facetThree = Facet::create();
-        $facetThree->setProperty('fieldName2');
+        $facetThree->setFieldName('fieldName2');
 
         $facetCollection = FacetCollection::create();
         $facetCollection->addFacet($facetOne);

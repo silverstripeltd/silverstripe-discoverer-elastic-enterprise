@@ -44,12 +44,12 @@ class QueryParamsHelperTest extends SapphireTest
 
         $facetOne = Facet::create();
         $facetOne->setType(Facet::TYPE_VALUE);
-        $facetOne->setProperty('fieldName1');
+        $facetOne->setFieldName('fieldName1');
         $facetOne->setName('facet1');
 
         $facetTwo = Facet::create();
         $facetTwo->setType(Facet::TYPE_VALUE);
-        $facetTwo->setProperty('fieldName2');
+        $facetTwo->setFieldName('fieldName2');
         $facetTwo->setName('facet2');
 
         // Add a bunch of Facets.
@@ -261,7 +261,7 @@ class QueryParamsHelperTest extends SapphireTest
 
         $facet = Facet::create();
         $facet->setType(Facet::TYPE_VALUE);
-        $facet->setProperty('fieldName1');
+        $facet->setFieldName('fieldName1');
         $facet->setName('facet1');
 
         $query->addFacet($facet);
