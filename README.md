@@ -40,7 +40,7 @@ Add the following to your `composer.json`:
 Then run the following:
 
 ```shell script
-composer require silverstripeltd/silverstripe-search-elastic-enterprise
+composer require silverstripeltd/discoverer-elastic-enterprise
 ```
 
 ## Specify environment variables
