@@ -20,12 +20,12 @@ class QueryParamsProcessor
     {
         $params = new SearchRequestParams($query->getQueryString());
 
-        $facets = self::getFacetsFromQuery($query);
-        $filters = self::getFiltersFromQuery($query);
-        $pagination = self::getPaginationFromQuery($query);
-        $resultFields = self::getResultFieldsFromQuery($query);
-        $searchFields = self::getSearchFieldsFromQuery($query);
-        $sort = self::getSortFromQuery($query);
+        $facets = $this->getFacetsFromQuery($query);
+        $filters = $this->getFiltersFromQuery($query);
+        $pagination = $this->getPaginationFromQuery($query);
+        $resultFields = $this->getResultFieldsFromQuery($query);
+        $searchFields = $this->getSearchFieldsFromQuery($query);
+        $sort = $this->getSortFromQuery($query);
 
         if ($facets) {
             $params->facets = $facets;

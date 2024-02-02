@@ -37,11 +37,11 @@ class ResultsProcessor
     public function getProcessedResults(Results $results, array $response): void
     {
         // Check that we have all critical fields in our Elastic response
-        self::validateResponse($response);
+        $this->validateResponse($response);
         // Start populating our Results object with data from our Elastic response
-        self::processMetaData($results, $response);
-        self::processRecords($results, $response);
-        self::processFacets($results, $response);
+        $this->processMetaData($results, $response);
+        $this->processRecords($results, $response);
+        $this->processFacets($results, $response);
     }
 
     /**
@@ -118,8 +118,8 @@ class ResultsProcessor
     private function processMetaData(Results $results, array $response): void
     {
         $pageSize = $response['meta']['page']['size'] ?? 0;
-        $pageLimit = self::config()->get('elastic_page_limit') ?? 0;
-        $resultsLimit = self::config()->get('elastic_results_limit') ?? 0;
+        $pageLimit = $this->config()->get('elastic_page_limit') ?? 0;
+        $resultsLimit = $this->config()->get('elastic_results_limit') ?? 0;
         $currentPage = $response['meta']['page']['current'] ?? 1;
 
         // Calculate the total paginated results that can be handled, taking into account the default elastic limits.
