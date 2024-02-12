@@ -46,7 +46,7 @@ class SearchServiceAdaptorTest extends SapphireTest
         // Set pagination purely so that we can check that our query params are applied
         $query->setPagination(10, 20);
         // Instantiate our service
-        $service = SearchService::create($query);
+        $service = SearchService::create();
         // Perform our search against the 'main' index
         $results = $service->search($query, 'main');
 
@@ -70,7 +70,7 @@ class SearchServiceAdaptorTest extends SapphireTest
         $this->mock->append(new Response(200, $headers, $body));
 
         $query = Query::create('query string');
-        $service = SearchService::create($query);
+        $service = SearchService::create();
         $results = $service->search($query, 'main');
 
         $this->assertFalse($results->isSuccess());
