@@ -144,7 +144,7 @@ class ResultsProcessor
     private function processRecords(Results $results, array $response): void
     {
         if (!array_key_exists('results', $response)) {
-            throw new Exception('Elastic Response contained to results array');
+            throw new Exception('Elastic Response contained no results array');
         }
 
         // Only used if analytics are enabled
