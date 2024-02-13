@@ -15,8 +15,8 @@ We have two private modules that make up our Elastic Enterprise Search integrati
     perhaps more likely, switch from Elastic App Search to Elasticsearch, then you (as a developer), shouldn't have to
     change much about how your applications interacts with the Service itself.
 * [Discoverer > Elastic Enterprise](https://github.com/silverstripeltd/discoverer-elastic-enterprise)
-  * (This module), which provides the adaptors so that the the Service module can communicate with Elastic Enterprise
-    Search APIs.
+  * (This module). Provides the adaptors so that the Service classes provided through the Discoverer module can 
+    communicate with Elastic Enterprise Search APIs.
 
 ## Installation
 
@@ -50,3 +50,10 @@ The following environment variables are required for this module to function:
 * `ENTERPRISE_SEARCH_ENDPOINT`
 * `ENTERPRISE_SEARCH_ENGINE_PREFIX`
 * `ENTERPRISE_SEARCH_API_SEARCH_KEY`
+
+## Usage
+
+Please see the documentation provided in (Discoverer)[https://github.com/silverstripeltd/discoverer].
+
+As mentioned above, this module serves as an "adaptor provider" for Discoverer. Besides the installation steps above,
+you shouldn't really be interacting with this module in your code.
