@@ -7,14 +7,14 @@ indices through Silverstripe controllers.
 
 ## Dependencies
 
-We have two private modules that make up our Elastic Enterprise Search integration:
+We have two private modules that make up our Elastic Enterprise Search integration (for performing actual searches):
 
-* [Silverstripe Search](https://github.com/silverstripeltd/discoverer)
-  * This modules provides you with all of the Search service interfaces that you will interact with in your project
-    code.
-  * The goal of this module is to be provider agnostic, so if we (for example) switch from Elastic to Solr, you (as a
-    developer), shouldn't have to change much about how your applications interacts with the Service itself.
-* [Silverstripe Search > Elastic Enterprise](https://github.com/silverstripeltd/discoverer-elastic-enterprise)
+* [Discoverer](https://github.com/silverstripeltd/discoverer)
+  * This modules provides you with all of the searching interfaces that you will interact with in your project code.
+  * The goal of this module is to be provider agnostic, so if we (for example) switch from Elasticsearch to Solr, or
+    perhaps more likely, switch from Elastic App Search to Elasticsearch, then you (as a developer), shouldn't have to
+    change much about how your applications interacts with the Service itself.
+* [Discoverer > Elastic Enterprise](https://github.com/silverstripeltd/discoverer-elastic-enterprise)
   * (This module), which provides the adaptors so that the the Service module can communicate with Elastic Enterprise
     Search APIs.
 
