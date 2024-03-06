@@ -27,9 +27,9 @@ class QueryParamsHelperTest extends SapphireTest
 {
 
     /**
-     * @see FacetAdaptorTest for test coverage rearding preparation of facets
-     *
      * This test only covers the basic functions performed in @see QueryParamsProcessor::getFacetsFromQuery()
+     *
+     * @see FacetAdaptorTest for test coverage rearding preparation of facets
      */
     public function testGetFacetsFromQuery(): void
     {
@@ -64,9 +64,9 @@ class QueryParamsHelperTest extends SapphireTest
     }
 
     /**
-     * @see CriteriaAdaptorTest for test coverage regarding preparation of filters
-     *
      * This test only covers the basic functions performed in @see QueryParamsProcessor::getFiltersFromQuery()
+     *
+     * @see CriteriaAdaptorTest for test coverage regarding preparation of filters
      */
     public function testGetFiltersFromQuery(): void
     {
@@ -161,7 +161,7 @@ class QueryParamsHelperTest extends SapphireTest
         $query->addResultField('field4', 100);
         $query->addResultField('field4', 20, true);
 
-        /** @var SimpleObject $searchFields */
+        /** @var SimpleObject $resultsFields */
         $resultsFields = $reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query);
 
         // Check that we have our two default result fields
@@ -252,7 +252,10 @@ class QueryParamsHelperTest extends SapphireTest
             ['field2' => Query::SORT_DESC],
         ];
 
-        $this->assertEqualsCanonicalizing($expected, $reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query));
+        $this->assertEqualsCanonicalizing(
+            $expected,
+            $reflectionMethod->invoke(QueryParamsProcessor::singleton(), $query)
+        );
     }
 
     public function testGetQueryParams(): void

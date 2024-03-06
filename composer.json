@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "silverstripeltd/bespoke-standards": "^1.2"
+        "slevomat/coding-standard": "^8.8"
     },
     "repositories": [
         {
@@ -46,14 +46,7 @@
         }
     },
     "scripts": {
-        "silverstripe-standards": [
-            "@php-lint",
-            "@phpcs"
-        ],
-        "php-lint": "bespoke-phplint",
-        "phpcs": "bespoke-phpcs",
-        "phpcbf": "bespoke-phpcbf",
-        "phpcs-fix": "@phpcbf"
+        "phpcs": "phpcs --standard=phpcs.xml --extensions=php --encoding=utf-8"
     }
 }
 

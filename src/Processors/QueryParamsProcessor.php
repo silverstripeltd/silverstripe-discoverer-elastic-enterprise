@@ -143,9 +143,11 @@ class QueryParamsProcessor
 
             $resultFields->{$fieldName}->{$fieldType} = new stdClass();
 
-            if ($fieldSize) {
-                $resultFields->{$fieldName}->{$fieldType}->size = $fieldSize;
+            if (!$fieldSize) {
+                continue;
             }
+
+            $resultFields->{$fieldName}->{$fieldType}->size = $fieldSize;
         }
 
         return $resultFields;
@@ -162,9 +164,11 @@ class QueryParamsProcessor
         foreach ($query->getSearchFields() as $fieldName => $weight) {
             $searchFields->{$fieldName} = new stdClass();
 
-            if ($weight) {
-                $searchFields->{$fieldName}->weight = $weight;
+            if (!$weight) {
+                continue;
             }
+
+            $searchFields->{$fieldName}->weight = $weight;
         }
 
         return $searchFields;
