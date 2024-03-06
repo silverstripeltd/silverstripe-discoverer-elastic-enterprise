@@ -72,7 +72,10 @@ class ResultsProcessor
 
         // We were missing one or more required top level fields
         if ($missingTopLevelFields) {
-            throw new Exception(sprintf('Missing required top level fields: %s', implode(', ', $missingTopLevelFields)));
+            throw new Exception(sprintf(
+                'Missing required top level fields: %s',
+                implode(', ', $missingTopLevelFields)
+            ));
         }
 
         // We expect every search to contain a value for `request_id`
@@ -101,17 +104,22 @@ class ResultsProcessor
             'current',
             'size',
             'total_pages',
-            'total_results'
+            'total_results',
         ];
 
         foreach ($expectedPagination as $expectedKey) {
-            if (!array_key_exists($expectedKey, $pagination)) {
-                $missingPaginationFields[] = $expectedKey;
+            if (array_key_exists($expectedKey, $pagination)) {
+                continue;
             }
+
+            $missingPaginationFields[] = $expectedKey;
         }
 
         if ($missingPaginationFields) {
-            throw new Exception(sprintf('Missing required pagination fields: %s', implode(', ', $missingPaginationFields)));
+            throw new Exception(sprintf(
+                'Missing required pagination fields: %s',
+                implode(', ', $missingPaginationFields)
+            ));
         }
     }
 
@@ -128,7 +136,7 @@ class ResultsProcessor
         $totalResults = min([
             $response['meta']['page']['total_results'] ?? 0,
             $pageLimit * $pageSize,
-            $resultsLimit
+            $resultsLimit,
         ]);
 
         $records = $results->getRecords();

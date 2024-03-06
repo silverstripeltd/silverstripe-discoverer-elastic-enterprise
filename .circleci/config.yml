@@ -227,7 +227,7 @@ commands:
     steps:
       - run:
           name: Checking against Silverstripe standards
-          command: composer silverstripe-standards
+          command: composer phpcs
 
   #
   # Run the PHP unit and functional tests in phpunit
@@ -295,7 +295,7 @@ jobs:
       - setup-permissions
 
       # linting
-#      - silverstripe-standards
+      - silverstripe-standards
 
       # build database
       - dev-build

@@ -23,7 +23,7 @@ class CriterionAdaptor implements CriterionAdaptorInterface
     {
         $comparison = $criterion->getComparison();
 
-        if (in_array($comparison, self::UNSUPPORTED_COMPARISONS)) {
+        if (in_array($comparison, self::UNSUPPORTED_COMPARISONS, true)) {
             throw new Exception(sprintf('Unsupported Elastic comparison "%s"', $comparison));
         }
 
@@ -49,6 +49,7 @@ class CriterionAdaptor implements CriterionAdaptorInterface
                 return [
                     $criterion->getTarget() => $range,
                 ];
+
             default:
                 return [
                     $criterion->getTarget() => $criterion->getValue(),

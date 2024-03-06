@@ -163,7 +163,7 @@ class ResultsProcessorTest extends SapphireTest
     /**
      * @dataProvider provideFieldNames
      */
-    public function testGetConvertedFieldName($fieldName, $expectedFieldName): void
+    public function testGetConvertedFieldName(string $fieldName, string $expectedFieldName): void
     {
         $resultsProcessor = ResultsProcessor::singleton();
 
@@ -244,8 +244,14 @@ class ResultsProcessorTest extends SapphireTest
         $this->assertEquals('<em>Search</em> <em>term</em> highlighted in title: Record 1', $title->getFormatted());
         $this->assertEquals('<em>Search</em> <em>term</em> highlighted in title: Record 1', $title->forTemplate());
         $this->assertEquals('Search term highlighted in description: Record 1', $description->getRaw());
-        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in description: Record 1', $description->getFormatted());
-        $this->assertEquals('<em>Search</em> <em>term</em> highlighted in description: Record 1', $description->forTemplate());
+        $this->assertEquals(
+            '<em>Search</em> <em>term</em> highlighted in description: Record 1',
+            $description->getFormatted()
+        );
+        $this->assertEquals(
+            '<em>Search</em> <em>term</em> highlighted in description: Record 1',
+            $description->forTemplate()
+        );
         $this->assertEquals('app_pages_blockpage_1', $id->getRaw());
         $this->assertNull($id->getFormatted());
         $this->assertEquals('app_pages_blockpage_1', $id->forTemplate());

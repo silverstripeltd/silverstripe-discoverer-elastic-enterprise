@@ -42,7 +42,7 @@ class CriteriaAdaptor implements CriteriaAdaptorInterface
 
             if ($clause instanceof Criterion) {
                 // NONE comparisons have to go into a separate array called "none"
-                if (in_array($clause->getComparison(), self::NONE_COMPARISONS)) {
+                if (in_array($clause->getComparison(), self::NONE_COMPARISONS, true)) {
                     $none = array_merge($none, $clause->getPreparedClause());
 
                     continue;
@@ -53,6 +53,7 @@ class CriteriaAdaptor implements CriteriaAdaptorInterface
                         $any = array_merge($any, $clause->getPreparedClause());
 
                         break;
+
                     default:
                         $all = array_merge($all, $clause->getPreparedClause());
                 }
@@ -65,6 +66,7 @@ class CriteriaAdaptor implements CriteriaAdaptorInterface
                     $any[] = $clause->getPreparedClause();
 
                     break;
+
                 default:
                     $all[] = $clause->getPreparedClause();
             }
