@@ -24,7 +24,7 @@ class ClientFactory implements Factory
             $missingEnvVars[] = 'ENTERPRISE_SEARCH_ENDPOINT';
         }
 
-        if (!$host) {
+        if (!$token) {
             $missingEnvVars[] = 'ENTERPRISE_SEARCH_API_KEY';
         }
 
