@@ -1,5 +1,7 @@
 ---
 Name: search-elastic-config
+Only:
+    envvarset: 'ENTERPRISE_SEARCH_API_SEARCH_KEY'
 ---
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Discoverer\Query\Facet\FacetAdaptor:
