@@ -1,9 +1,9 @@
 {
-    "name": "silverstripeltd/discoverer-elastic-enterprise",
-    "description": "A plugin module for silverstripeltd/discoverer that provides integration for Elastic Enterprise and App Search",
+    "name": "silverstripe/silverstripe-discoverer-elastic-enterprise",
+    "description": "A plugin module for silverstripe/silverstripe-discoverer that provides integration for Elastic Enterprise and App Search",
     "type": "silverstripe-vendormodule",
     "license": "BSD-3-Clause",
-    "homepage": "https://github.com/silverstripeltd/discoverer-elastic-enterprise",
+    "homepage": "https://github.com/silverstripeltd/silverstripe-discoverer-elastic-enterprise",
     "authors": [
         {
             "name": "Christopher David Penny",
@@ -17,12 +17,13 @@
         "Elastic",
         "Elastic Search",
         "Elastic Enterprise",
-        "Elastic Enterprise Search"
+        "Elastic Enterprise Search",
+        "App Search"
     ],
     "require": {
         "php": "^8.1",
         "silverstripe/framework": "^5",
-        "silverstripeltd/discoverer": "dev-main",
+        "silverstripe/silverstripe-discoverer": "dev-main",
         "elastic/enterprise-search": "^8.10",
         "guzzlehttp/guzzle": "^7.5"
     },
@@ -33,7 +34,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:silverstripeltd/discoverer.git"
+            "url": "git@github.com:silverstripeltd/silverstripe-discoverer.git"
         }
     ],
     "autoload": {
