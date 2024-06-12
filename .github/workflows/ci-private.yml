@@ -186,6 +186,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
+      # restore .env from main.yml # this is a local customisation
+      - name: restore env cache
+        uses: actions/cache/restore@v4
+        with:
+            path: |
+                .env
+            key: 'env-1'
+
       - name: Install PHP
         # SHA will need to be updated to support new php version when they are released
         uses: shivammathur/setup-php@1a18b2267f80291a81ca1d33e7c851fe09e7dfc4 # v2.22.0
@@ -738,7 +746,7 @@ jobs:
               if [[ "${{ matrix.db }}" == "mysql57pdo" ]]; then
                 echo "mysql version":
                 mysql --host=127.0.0.1 --port=3357 --user=root --password=root --execute="SELECT VERSION();" || true
-                cat << EOF > .env
+                cat << EOF >> .env
           SS_DATABASE_CLASS="MySQLPDODatabase"
           SS_DATABASE_PORT="3357"
           EOF
@@ -746,7 +754,7 @@ jobs:
                 MYSQL_PORT=${{ matrix.db == 'mysql57' && '3357' || '3380' }}
                 echo "mysql version":
                 mysql --host=127.0.0.1 --user=root --password=root --port=$MYSQL_PORT --execute="SELECT VERSION();" || true
-                cat << EOF > .env
+                cat << EOF >> .env
           SS_DATABASE_CLASS="MySQLDatabase"
           SS_DATABASE_PORT="${MYSQL_PORT}"
           EOF
@@ -757,7 +765,7 @@ jobs:
           SS_DATABASE_PASSWORD="root"
           EOF
             elif [[ "${{ matrix.db }}" =~ pgsql ]]; then
-              cat << EOF > .env
+              cat << EOF >> .env
           SS_DATABASE_CLASS="PostgreSQLDatabase"
           SS_DATABASE_SERVER="localhost"
           SS_DATABASE_PORT="5432"
@@ -765,7 +773,7 @@ jobs:
           SS_DATABASE_PASSWORD="postgres"
           EOF
             elif [[ "${{ matrix.db }}" =~ sqlite3 ]]; then
-              cat << EOF > .env
+              cat << EOF >> .env
           SS_DATABASE_CLASS="SQLite3Database"
           SS_DATABASE_USERNAME="root"
           SS_DATABASE_PASSWORD=""
@@ -774,7 +782,7 @@ jobs:
             elif [[ "${{ matrix.db }}" =~ mariadb ]]; then
               echo "mariadb version":
               mysql --host=127.0.0.1 --port=3311 --user=root --password=root --execute="SELECT VERSION();" || true
-              cat << EOF > .env
+              cat << EOF >> .env
           SS_DATABASE_SERVER="127.0.0.1"
           SS_DATABASE_PORT="3311"
           SS_DATABASE_USERNAME="root"

@@ -55,4 +55,3 @@
         "phpcs": "phpcs --standard=phpcs.xml --extensions=php --encoding=utf-8"
     }
 }
-
