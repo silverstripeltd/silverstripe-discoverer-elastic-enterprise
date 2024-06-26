@@ -60,11 +60,7 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         try {
             $params = QueryParamsProcessor::singleton()->getQueryParams($query);
             $engine = $this->environmentizeIndex($indexName);
-            $request = Injector::inst()->create(
-                Search::class,
-                $engine,
-                $params
-            );
+            $request = Injector::inst()->create(Search::class, $engine, $params);
             $response = $this->client->appSearch()->search($request);
 
             ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
@@ -94,21 +90,13 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         $engineName = $analyticsData->getEngineName();
 
         try {
-            $params = Injector::inst()->create(
-                ClickParams::class,
-                $query,
-                $documentId
-            );
+            $params = Injector::inst()->create(ClickParams::class, $query, $documentId);
 
             if ($requestId) {
                 $params->request_id = $requestId;
             }
 
-            $clickThrough = Injector::inst()->create(
-                LogClickthrough::class,
-                $engineName,
-                $params
-            );
+            $clickThrough = Injector::inst()->create(LogClickthrough::class, $engineName, $params);
             $this->client->appSearch()->logClickthrough($clickThrough);
         } catch (Throwable $e) {
             // Log the error without breaking the page
