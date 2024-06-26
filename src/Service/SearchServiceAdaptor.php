@@ -9,8 +9,10 @@ use Elastic\EnterpriseSearch\Client;
 use Elastic\EnterpriseSearch\Exception\ClientErrorResponseException;
 use Exception;
 use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Discoverer\Analytics\AnalyticsData;
 use SilverStripe\Discoverer\Query\Query;
 use SilverStripe\Discoverer\Service\Results\Results;
@@ -23,10 +25,13 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 {
 
     use Injectable;
+    use Configurable;
 
     private ?Client $client = null;
 
     private ?LoggerInterface $logger = null;
+
+    private static string $prefix_env_var = 'ENTERPRISE_SEARCH_ENGINE_PREFIX';
 
     private static array $dependencies = [
         'client' => '%$' . Client::class . '.searchClient',
@@ -55,7 +60,11 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         try {
             $params = QueryParamsProcessor::singleton()->getQueryParams($query);
             $engine = $this->environmentizeIndex($indexName);
-            $request = new Search($engine, $params);
+            $request = Injector::inst()->create(
+                Search::class,
+                $engine,
+                $params
+            );
             $response = $this->client->appSearch()->search($request);
 
             ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
@@ -85,13 +94,22 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
         $engineName = $analyticsData->getEngineName();
 
         try {
-            $params = new ClickParams($query, $documentId);
+            $params = Injector::inst()->create(
+                ClickParams::class,
+                $query,
+                $documentId
+            );
 
             if ($requestId) {
                 $params->request_id = $requestId;
             }
 
-            $this->client->appSearch()->logClickthrough(new LogClickthrough($engineName, $params));
+            $clickThrough = Injector::inst()->create(
+                LogClickthrough::class,
+                $engineName,
+                $params
+            );
+            $this->client->appSearch()->logClickthrough($clickThrough);
         } catch (Throwable $e) {
             // Log the error without breaking the page
             $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
@@ -100,7 +118,7 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
 
     private function environmentizeIndex(string $indexName): string
     {
-        $variant = Environment::getEnv('ENTERPRISE_SEARCH_ENGINE_PREFIX');
+        $variant = Environment::getEnv($this->config()->get('prefix_env_var'));
 
         if ($variant) {
             return sprintf('%s-%s', $variant, $indexName);
