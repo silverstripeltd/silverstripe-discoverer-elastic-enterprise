@@ -285,6 +285,36 @@ class QueryParamsHelperTest extends SapphireTest
         $this->assertIsArray($params->sort);
     }
 
+    public function testAddTag(): void
+    {
+        $query = Query::create('search string');
+        $query->addTag('web');
+        $query->addTag('mobile');
+
+        $expected = [
+            'web',
+            'mobile',
+        ];
+
+        $this->assertEquals($expected, $query->getTags());
+    }
+
+    public function testAddTags(): void
+    {
+        $query = Query::create('search string');
+        // Set an initial tag that we'll expect to get overridden
+        $query->addTag('web');
+
+        $expected = [
+            'mobile',
+            'native',
+        ];
+        // Override our original tag
+        $query->setTags($expected);
+
+        $this->assertEquals($expected, $query->getTags());
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

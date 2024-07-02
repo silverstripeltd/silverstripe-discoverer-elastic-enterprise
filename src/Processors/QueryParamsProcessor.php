@@ -26,6 +26,7 @@ class QueryParamsProcessor
         $resultFields = $this->getResultFieldsFromQuery($query);
         $searchFields = $this->getSearchFieldsFromQuery($query);
         $sort = $this->getSortFromQuery($query);
+        $analytics = $this->getAnalyticsFromQuery($query);
 
         if ($facets) {
             $params->facets = $facets;
@@ -49,6 +50,14 @@ class QueryParamsProcessor
 
         if ($sort) {
             $params->sort = $sort;
+        }
+
+        if ($sort) {
+            $params->sort = $sort;
+        }
+
+        if ($analytics) {
+            $params->analytics = $analytics;
         }
 
         return $params;
@@ -185,6 +194,18 @@ class QueryParamsProcessor
         }
 
         return $processedSort;
+    }
+
+    private function getAnalyticsFromQuery(Query $query): ?SimpleObject
+    {
+        if (!$query->getTags()) {
+            return null;
+        }
+
+        $analyticsField = new SimpleObject();
+        $analyticsField->tags = $query->getTags();
+
+        return $analyticsField;
     }
 
 }
