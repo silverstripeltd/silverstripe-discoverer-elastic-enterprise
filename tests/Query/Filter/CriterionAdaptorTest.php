@@ -31,8 +31,33 @@ class CriterionAdaptorTest extends SapphireTest
         return [
             [Criterion::EQUAL],
             [Criterion::NOT_EQUAL],
-            [Criterion::GREATER_EQUAL],
-            [Criterion::LESS_EQUAL],
+        ];
+    }
+
+    /**
+     * @dataProvider provideGreaterLessComparisons
+     */
+    public function testGreaterLessComparison(string $comparison, string $key): void
+    {
+        $date = '2024-01-01 01:02:03';
+        $criterion = Criterion::create('fieldName', $date, $comparison);
+        // Not using injector, because I'm testing this specific class
+        $adaptor = new CriterionAdaptor();
+
+        $expected = [
+            'fieldName' => [
+                $key => $date,
+            ],
+        ];
+
+        $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
+    }
+
+    public function provideGreaterLessComparisons(): array
+    {
+        return [
+            [Criterion::GREATER_EQUAL, 'from'],
+            [Criterion::LESS_EQUAL, 'to'],
         ];
     }
 

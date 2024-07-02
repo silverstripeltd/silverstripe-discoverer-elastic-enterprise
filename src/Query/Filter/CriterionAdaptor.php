@@ -35,11 +35,11 @@ class CriterionAdaptor implements CriterionAdaptorInterface
                 $range = [];
 
                 if ($from) {
-                    $range['from'] = $this->ensureDateFormat($from);
+                    $range['from'] = $from;
                 }
 
                 if ($to) {
-                    $range['to'] = $this->ensureDateFormat($to);
+                    $range['to'] = $to;
                 }
 
                 if (!$range) {
@@ -53,14 +53,14 @@ class CriterionAdaptor implements CriterionAdaptorInterface
             case Criterion::GREATER_EQUAL:
                 return [
                     $criterion->getTarget() => [
-                        'from' => $this->ensureDateFormat($criterion->getValue()),
+                        'from' => $criterion->getValue(),
                     ],
                 ];
 
             case Criterion::LESS_EQUAL:
                 return [
                     $criterion->getTarget() => [
-                        'to' => $this->ensureDateFormat($criterion->getValue()),
+                        'to' => $criterion->getValue(),
                     ],
                 ];
 
@@ -69,11 +69,6 @@ class CriterionAdaptor implements CriterionAdaptorInterface
                     $criterion->getTarget() => $criterion->getValue(),
                 ];
         }
-    }
-
-    private function ensureDateFormat(string $date): string
-    {
-        return date("Y-m-d\TH:i:sP", strtotime($date));
     }
 
 }

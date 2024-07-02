@@ -25,8 +25,12 @@ class CriteriaAdaptorTest extends SapphireTest
 
         $expected = [
             'all' => [
-                'field1' => 'value1',
-                'field2' => 'value2',
+                [
+                    'field1' => 'value1',
+                ],
+                [
+                    'field2' => 'value2',
+                ],
             ],
             'any' => [],
             'none' => [],
@@ -47,8 +51,12 @@ class CriteriaAdaptorTest extends SapphireTest
         $expected = [
             'all' => [],
             'any' => [
-                'field1' => 'value1',
-                'field2' => 'value2',
+                [
+                    'field1' => 'value1',
+                ],
+                [
+                    'field2' => 'value2',
+                ],
             ],
             'none' => [],
         ];
@@ -71,12 +79,18 @@ class CriteriaAdaptorTest extends SapphireTest
 
         $expected = [
             'all' => [
-                'field3' => 'value3',
+                [
+                    'field3' => 'value3',
+                ],
             ],
             'any' => [],
             'none' => [
-                'field1' => 'value1',
-                'field2' => 'value2',
+                [
+                    'field1' => 'value1',
+                ],
+                [
+                    'field2' => 'value2',
+                ],
             ],
         ];
 
@@ -99,11 +113,17 @@ class CriteriaAdaptorTest extends SapphireTest
         $expected = [
             'all' => [],
             'any' => [
-                'field3' => 'value3',
+                [
+                    'field3' => 'value3',
+                ],
             ],
             'none' => [
-                'field1' => 'value1',
-                'field2' => 'value2',
+                [
+                    'field1' => 'value1',
+                ],
+                [
+                    'field2' => 'value2',
+                ],
             ],
         ];
 
@@ -146,21 +166,33 @@ class CriteriaAdaptorTest extends SapphireTest
                 [
                     'all' => [],
                     'any' => [
-                        'field1' => 'value1',
-                        'field2' => 'value2',
+                        [
+                            'field1' => 'value1',
+                        ],
+                        [
+                            'field2' => 'value2',
+                        ],
                     ],
                     'none' => [
-                        'field3' => 'value3',
+                        [
+                            'field3' => 'value3',
+                        ],
                     ],
                 ],
                 [
                     'all' => [
-                        'field4' => 'value4',
-                        'field5' => 'value5',
+                        [
+                            'field4' => 'value4',
+                        ],
+                        [
+                            'field5' => 'value5',
+                        ],
                     ],
                     'any' => [],
                     'none' => [
-                        'field6' => 'value6',
+                        [
+                            'field6' => 'value6',
+                        ],
                     ],
                 ],
             ],
@@ -205,21 +237,33 @@ class CriteriaAdaptorTest extends SapphireTest
                 [
                     'all' => [],
                     'any' => [
-                        'field1' => 'value1',
-                        'field2' => 'value2',
+                        [
+                            'field1' => 'value1',
+                        ],
+                        [
+                            'field2' => 'value2',
+                        ],
                     ],
                     'none' => [
-                        'field3' => 'value3',
+                        [
+                            'field3' => 'value3',
+                        ],
                     ],
                 ],
                 [
                     'all' => [
-                        'field4' => 'value4',
-                        'field5' => 'value5',
+                        [
+                            'field4' => 'value4',
+                        ],
+                        [
+                            'field5' => 'value5',
+                        ],
                     ],
                     'any' => [],
                     'none' => [
-                        'field6' => 'value6',
+                        [
+                            'field6' => 'value6',
+                        ],
                     ],
                 ],
             ],
