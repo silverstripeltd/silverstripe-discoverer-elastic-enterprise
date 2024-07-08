@@ -189,7 +189,7 @@ class QueryParamsProcessor
 
         foreach ($query->getSort() as $fieldName => $direction) {
             $processedSort[] = [
-                $fieldName => $direction,
+                $fieldName => strtolower($direction),
             ];
         }
 
