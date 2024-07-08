@@ -248,8 +248,8 @@ class QueryParamsHelperTest extends SapphireTest
         $query->addSort('field2', Query::SORT_DESC);
 
         $expected = [
-            ['field1' => Query::SORT_ASC],
-            ['field2' => Query::SORT_DESC],
+            ['field1' => 'asc'],
+            ['field2' => 'desc'],
         ];
 
         $this->assertEqualsCanonicalizing(
