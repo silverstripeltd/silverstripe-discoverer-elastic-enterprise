@@ -23,7 +23,7 @@
     "require": {
         "php": "^8.1",
         "silverstripe/framework": "^5",
-        "silverstripe/silverstripe-discoverer": "^1",
+        "silverstripe/silverstripe-discoverer": "dev-feature/query-suggestions",
         "elastic/enterprise-search": "^8.10",
         "guzzlehttp/guzzle": "^7.5"
     },
@@ -31,12 +31,8 @@
         "phpunit/phpunit": "^9.6.19",
         "slevomat/coding-standard": "^8.8"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:silverstripeltd/silverstripe-discoverer.git"
-        }
-    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "SilverStripe\\DiscovererElasticEnterprise\\": "src/",
