@@ -55,7 +55,7 @@ class SuggestionsProcessor
         // We were missing one or more required top level fields
         if ($missingTopLevelFields) {
             throw new Exception(sprintf(
-                'Missing required top level fields: %s',
+                'Missing required top level fields for query suggestions: %s',
                 implode(', ', $missingTopLevelFields)
             ));
         }
