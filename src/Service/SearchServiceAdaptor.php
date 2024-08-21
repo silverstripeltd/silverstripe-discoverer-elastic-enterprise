@@ -3,6 +3,7 @@
 namespace SilverStripe\DiscovererElasticEnterprise\Service;
 
 use Elastic\EnterpriseSearch\AppSearch\Request\LogClickthrough;
+use Elastic\EnterpriseSearch\AppSearch\Request\QuerySuggestion;
 use Elastic\EnterpriseSearch\AppSearch\Request\Search;
 use Elastic\EnterpriseSearch\AppSearch\Schema\ClickParams;
 use Elastic\EnterpriseSearch\Client;
@@ -15,10 +16,14 @@ use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Discoverer\Analytics\AnalyticsData;
 use SilverStripe\Discoverer\Query\Query;
+use SilverStripe\Discoverer\Query\Suggestion;
 use SilverStripe\Discoverer\Service\Results\Results;
+use SilverStripe\Discoverer\Service\Results\Suggestions;
 use SilverStripe\Discoverer\Service\SearchServiceAdaptor as SearchServiceAdaptorInterface;
 use SilverStripe\DiscovererElasticEnterprise\Processors\QueryParamsProcessor;
 use SilverStripe\DiscovererElasticEnterprise\Processors\ResultsProcessor;
+use SilverStripe\DiscovererElasticEnterprise\Processors\SuggestionParamsProcessor;
+use SilverStripe\DiscovererElasticEnterprise\Processors\SuggestionsProcessor;
 use Throwable;
 
 class SearchServiceAdaptor implements SearchServiceAdaptorInterface
@@ -79,6 +84,37 @@ class SearchServiceAdaptor implements SearchServiceAdaptorInterface
             $results->setSuccess(false);
         } finally {
             return $results;
+        }
+    }
+
+    public function querySuggestion(Suggestion $suggestion, string $indexName): Suggestions
+    {
+        // Instantiate our Suggestions class with empty data. This will still be returned if there is an Exception
+        // during communication with Elastic (so that the page doesn't seriously break)
+        $suggestions = Suggestions::create();
+
+        try {
+            $engine = $this->environmentizeIndex($indexName);
+            $params = SuggestionParamsProcessor::singleton()->getQueryParams($suggestion);
+            $request = Injector::inst()->create(QuerySuggestion::class, $engine, $params);
+            $response = $this->client->appSearch()->querySuggestion($request);
+
+            SuggestionsProcessor::singleton()->getProcessedSuggestions($suggestions, $response->asArray());
+            // If we got this far, then the request was a success
+            $suggestions->setSuccess(true);
+        } catch (ClientErrorResponseException $e) {
+            $errors = (string) $e->getResponse()->getBody();
+            // Log the error without breaking the page
+            $this->logger->error(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
+            // Our request was not a success
+            $suggestions->setSuccess(false);
+        } catch (Throwable $e) {
+            // Log the error without breaking the page
+            $this->logger->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
+            // Our request was not a success
+            $suggestions->setSuccess(false);
+        } finally {
+            return $suggestions;
         }
     }
 
