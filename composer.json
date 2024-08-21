@@ -31,8 +31,6 @@
         "phpunit/phpunit": "^9.6.19",
         "slevomat/coding-standard": "^8.8"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "SilverStripe\\DiscovererElasticEnterprise\\": "src/",
