@@ -8,6 +8,7 @@ use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Discoverer\Analytics\AnalyticsData;
 use SilverStripe\Discoverer\Analytics\AnalyticsMiddleware;
+use SilverStripe\Discoverer\Service\FieldService;
 use SilverStripe\Discoverer\Service\Results\Facet;
 use SilverStripe\Discoverer\Service\Results\FacetData;
 use SilverStripe\Discoverer\Service\Results\Field;
@@ -182,7 +183,7 @@ class ResultsProcessor
 
             foreach ($result as $fieldName => $valueFields) {
                 // Convert snake_case (Elastic's field name format) to PascalCase (Silverstripe's field name format)
-                $formattedFieldName = $this->getConvertedFieldName($fieldName);
+                $formattedFieldName = FieldService::singleton()->getConvertedFieldName($fieldName);
 
                 $raw = $valueFields['raw'] ?? null;
                 $snippet = $valueFields['snippet'] ?? null;
@@ -239,11 +240,6 @@ class ResultsProcessor
                 $results->addFacet($facet);
             }
         }
-    }
-
-    private function getConvertedFieldName(string $fieldName): string
-    {
-        return str_replace('_', '', ucwords($fieldName, '_'));
     }
 
 }

@@ -160,30 +160,6 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->invoke($resultsProcessor, $response);
     }
 
-    /**
-     * @dataProvider provideFieldNames
-     */
-    public function testGetConvertedFieldName(string $fieldName, string $expectedFieldName): void
-    {
-        $resultsProcessor = ResultsProcessor::singleton();
-
-        /** @see ResultsProcessor::getConvertedFieldName() */
-        $reflectionMethod = new ReflectionMethod($resultsProcessor, 'getConvertedFieldName');
-        $reflectionMethod->setAccessible(true);
-
-        $this->assertEquals($expectedFieldName, $reflectionMethod->invoke($resultsProcessor, $fieldName));
-    }
-
-    public function provideFieldNames(): array
-    {
-        return [
-            ['title', 'Title'],
-            ['elemental_area', 'ElementalArea'],
-            ['record_id', 'RecordId'],
-            ['tag_ids', 'TagIds'],
-        ];
-    }
-
     public function testProcessMetaData(): void
     {
         $resultsProcessor = ResultsProcessor::singleton();
@@ -224,8 +200,15 @@ class ResultsProcessorTest extends SapphireTest
 
         /** @var Record $record */
         $record = $results->getRecords()->getList()->first();
+
         // Start testing that the snake_case fields from Elastic are converted to Silverstripe PascalCase equivalents,
         // and that we have our expected Raw and Snippet values
+        $this->assertTrue($record->hasDynamicData('Title'));
+        $this->assertTrue($record->hasDynamicData('Description'));
+        $this->assertTrue($record->hasDynamicData('Id'));
+        $this->assertTrue($record->hasDynamicData('RecordId'));
+        $this->assertTrue($record->hasDynamicData('SourceClass'));
+
         /** @var Field $title */
         $title = $record->Title;
         /** @var Field $description */
