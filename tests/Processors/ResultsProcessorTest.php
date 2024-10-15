@@ -200,8 +200,15 @@ class ResultsProcessorTest extends SapphireTest
 
         /** @var Record $record */
         $record = $results->getRecords()->getList()->first();
+
         // Start testing that the snake_case fields from Elastic are converted to Silverstripe PascalCase equivalents,
         // and that we have our expected Raw and Snippet values
+        $this->assertTrue($record->hasDynamicData('Title'));
+        $this->assertTrue($record->hasDynamicData('Description'));
+        $this->assertTrue($record->hasDynamicData('Id'));
+        $this->assertTrue($record->hasDynamicData('RecordId'));
+        $this->assertTrue($record->hasDynamicData('SourceClass'));
+
         /** @var Field $title */
         $title = $record->Title;
         /** @var Field $description */
