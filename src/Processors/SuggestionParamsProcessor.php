@@ -4,6 +4,7 @@ namespace SilverStripe\DiscovererElasticEnterprise\Processors;
 
 use Elastic\EnterpriseSearch\AppSearch\Schema\QuerySuggestionRequest;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Discoverer\Query\Suggestion;
 use stdClass;
 
@@ -14,7 +15,7 @@ class SuggestionParamsProcessor
 
     public function getQueryParams(Suggestion $suggestion): QuerySuggestionRequest
     {
-        $querySuggestionParams = new QuerySuggestionRequest();
+        $querySuggestionParams = Injector::inst()->create(QuerySuggestionRequest::class);
         $querySuggestionParams->query = $suggestion->getQueryString();
 
         $limit = $suggestion->getLimit();

@@ -7,6 +7,7 @@ use Elastic\EnterpriseSearch\AppSearch\Schema\SearchFields;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SearchRequestParams;
 use Elastic\EnterpriseSearch\AppSearch\Schema\SimpleObject;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Discoverer\Query\Filter\Criteria;
 use SilverStripe\Discoverer\Query\Query;
 use stdClass;
@@ -18,7 +19,7 @@ class QueryParamsProcessor
 
     public function getQueryParams(Query $query): SearchRequestParams
     {
-        $params = new SearchRequestParams($query->getQueryString());
+        $params = Injector::inst()->create(SearchRequestParams::class, $query->getQueryString());
 
         $facets = $this->getFacetsFromQuery($query);
         $filters = $this->getFiltersFromQuery($query);
@@ -117,7 +118,7 @@ class QueryParamsProcessor
         // Elastic uses page numbers instead of offset, so we need to convert. Note: Offset starts at 0
         $pageNum = (int) ceil($offset / $limit) + 1;
 
-        $pagination = new PaginationResponseObject();
+        $pagination = Injector::inst()->create(PaginationResponseObject::class);
         $pagination->size = $limit;
         $pagination->current = $pageNum;
 
