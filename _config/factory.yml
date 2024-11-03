@@ -1,7 +1,7 @@
 ---
 Name: discoverer-elastic-factory
 Only:
-    envvarset: 'ENTERPRISE_SEARCH_API_SEARCH_KEY'
+  envvarset: 'ENTERPRISE_SEARCH_API_SEARCH_KEY'
 ---
 SilverStripe\Core\Injector\Injector:
   Elastic\EnterpriseSearch\Client.searchClient:

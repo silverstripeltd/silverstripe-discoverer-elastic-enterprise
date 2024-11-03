@@ -4,6 +4,7 @@ namespace SilverStripe\DiscovererElasticEnterprise\Processors;
 
 use Exception;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Discoverer\Service\Results\Field;
 use SilverStripe\Discoverer\Service\Results\Suggestions;
 
 class SuggestionsProcessor
@@ -25,7 +26,7 @@ class SuggestionsProcessor
                 continue;
             }
 
-            $suggestions->addSuggestion($suggestion);
+            $suggestions->addSuggestion(Field::create($suggestion));
         }
     }
 
