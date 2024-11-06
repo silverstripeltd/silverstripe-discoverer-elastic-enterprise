@@ -1,0 +1,12 @@
+---
+Name: discoverer-elastic-factory
+Only:
+  envvarset: 'ENTERPRISE_SEARCH_API_SEARCH_KEY'
+---
+SilverStripe\Core\Injector\Injector:
+  Elastic\EnterpriseSearch\Client.searchClient:
+    factory: SilverStripe\DiscovererElasticEnterprise\Service\ClientFactory
+    constructor:
+      host: '`ENTERPRISE_SEARCH_ENDPOINT`'
+      token: '`ENTERPRISE_SEARCH_API_SEARCH_KEY`'
+      http_client: '%$GuzzleHttp\Client'

@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\DiscovererElasticEnterprise\Tests\Service;
+namespace SilverStripe\DiscovererElasticEnterprise\Tests\Service\Adaptors;
 
 use Elastic\EnterpriseSearch\Client as ElasticClient;
 use GuzzleHttp\Client as GuzzleClient;
@@ -14,22 +14,22 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Discoverer\Query\Query;
 use SilverStripe\Discoverer\Service\SearchService;
-use SilverStripe\DiscovererElasticEnterprise\Service\SearchServiceAdaptor;
+use SilverStripe\DiscovererElasticEnterprise\Service\Adaptors\SearchAdaptor;
 use SilverStripe\DiscovererElasticEnterprise\Tests\Logger\QuietLogger;
 
-class SearchServiceAdaptorTest extends SapphireTest
+class SearchAdaptorTest extends SapphireTest
 {
 
     protected ?MockHandler $mock;
 
     public function testEnvironmentizeIndex(): void
     {
-        $searchServiceAdaptor = SearchServiceAdaptor::create();
-        /** @see SearchServiceAdaptor::environmentizeIndex() */
-        $reflectionMethod = new ReflectionMethod($searchServiceAdaptor, 'environmentizeIndex');
+        $searchAdaptor = SearchAdaptor::create();
+        /** @see SearchService::environmentizeIndex() */
+        $reflectionMethod = new ReflectionMethod($searchAdaptor, 'environmentizeIndex');
         $reflectionMethod->setAccessible(true);
 
-        $this->assertEquals('elastic-main', $reflectionMethod->invoke($searchServiceAdaptor, 'main'));
+        $this->assertEquals('elastic-main', $reflectionMethod->invoke($searchAdaptor, 'main'));
     }
 
     public function testSearchSuccess(): void
