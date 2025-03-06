@@ -20,7 +20,7 @@ class ElasticsearchRequest extends Request
     {
         $this->method = 'POST';
         $engine_name = urlencode($engineName);
-        $this->path = "/api/as/v1/engines/$engine_name/elasticsearch/_search";
+        $this->path = '/api/as/v1/engines/' . $engine_name . '/elasticsearch/_search';
         $this->headers['Content-Type'] = 'application/json';
         $this->body = $params;
     }

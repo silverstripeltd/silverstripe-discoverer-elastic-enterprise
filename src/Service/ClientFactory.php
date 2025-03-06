@@ -5,7 +5,6 @@ namespace SilverStripe\DiscovererElasticEnterprise\Service;
 use Elastic\EnterpriseSearch\Client;
 use Exception;
 use SilverStripe\Core\Injector\Factory;
-use SilverStripe\Core\Injector\Injector;
 
 class ClientFactory implements Factory
 {

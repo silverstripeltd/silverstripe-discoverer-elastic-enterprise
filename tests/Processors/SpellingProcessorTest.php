@@ -13,7 +13,7 @@ class SpellingProcessorTest extends SapphireTest
     /**
      * @dataProvider suggestionProvider
      */
-    public function testGetProcessedSuggestions($variation, $expected, $expectedError): void
+    public function testGetProcessedSuggestions(array $variation, array $expected, ?string $expectedError): void
     {
         $suggestions = Suggestions::create();
         $error = null;

@@ -23,7 +23,7 @@ class SpellingProcessor
         $documentSuggestions = $response['suggest'] ?? [];
         $deduplicatedSuggestions = [];
 
-        foreach ($documentSuggestions as $fieldName => $documentSuggestion) {
+        foreach ($documentSuggestions as $documentSuggestion) {
             $suggestion = array_pop($documentSuggestion);
             $options = $suggestion['options'] ?? null;
 
