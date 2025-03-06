@@ -5,10 +5,13 @@
 > version 8, and that maintenance support will be halted 21 months after the release of version 9 (the date of which
 > is still TBC, but current thinking is early/mid 2025).\
 > https://www.elastic.co/support/eol
+>
+> Keep in mind, the core Discoverer module was designed to be service agnostic - so, once you pick a new search
+> provider, you just need to create a plugin module for Discoverer (if there isn't one already). Your application's
+> search implementation shouldn't actually have to change.
 > 
-> Elasticsearch will still be supported into the future, so that is certainly one option that you could look in to.
-> There is currently no Elasticsearch Discoverer plugin module, but it would certainly be possible (and not too
-> difficult) to create one.
+> Elasticsearch (which is the core technology that Enterprise Search was built on) will still be supported into the
+> future, so that is definitely one option that you could look in to.
 
 ## Purpose
 
