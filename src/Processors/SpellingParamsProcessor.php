@@ -15,7 +15,6 @@ class SpellingParamsProcessor
 
     public function getQueryParams(Suggestion $suggestion): EsSearchParams
     {
-
         $spellingSuggestionParams = Injector::inst()->create(EsSearchParams::class);
         $suggest = new stdClass();
         // global suggest text

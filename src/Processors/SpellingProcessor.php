@@ -12,6 +12,9 @@ class SpellingProcessor
 
     use Injectable;
 
+    /**
+     * @throws Exception
+     */
     public function getProcessedSuggestions(Suggestions $suggestions, array $response): void
     {
         // Check that we have all critical fields in our Elastic response
@@ -40,6 +43,9 @@ class SpellingProcessor
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function validateResponse(array $response): void
     {
         // If any errors are present, then let's throw and track what they were
