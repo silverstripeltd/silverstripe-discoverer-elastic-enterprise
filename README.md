@@ -31,3 +31,7 @@ Please see the documentation provided in (Discoverer)[https://github.com/silvers
 
 As mentioned above, this module serves as an "adaptor provider" for Discoverer. Besides the installation steps and
 environment variables above, you shouldn't really be interacting with this module in your code.
+
+## Feature support
+
+Spelling suggestions are supported using [App Search's Elasticsearch Search API](https://www.elastic.co/guide/en/app-search/8.17/elasticsearch-search-api-reference.html) (that's a lot of search) which is available on >=8.5 of Elasticsearch.
