@@ -4,7 +4,6 @@ namespace SilverStripe\DiscovererElasticEnterprise\Tests\Processors;
 
 use ReflectionMethod;
 use SilverStripe\Core\Environment;
-use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Discoverer\Analytics\AnalyticsData;
 use SilverStripe\Discoverer\Analytics\AnalyticsMiddleware;
 use SilverStripe\Discoverer\Query\Query;
@@ -12,8 +11,9 @@ use SilverStripe\Discoverer\Service\Results\Field;
 use SilverStripe\Discoverer\Service\Results\Record;
 use SilverStripe\Discoverer\Service\Results\Results;
 use SilverStripe\DiscovererElasticEnterprise\Processors\ResultsProcessor;
+use SilverStripe\DiscovererElasticEnterprise\Tests\AbstractDiscovererElasticEnterpriseTest;
 
-class ResultsProcessorTest extends SapphireTest
+class ResultsProcessorTest extends AbstractDiscovererElasticEnterpriseTest
 {
 
     public function testValidateResponse(): void
