@@ -48,7 +48,7 @@ class ClientFactory implements Factory
             'client' => $httpClient,
         ];
 
-        return Injector::inst()->create(Client::class, $config);
+        return new Client($config);
     }
 
 }
