@@ -11,7 +11,7 @@ use SilverStripe\Core\Injector\Injectable;
  *
  * @see https://www.elastic.co/guide/en/app-search/8.17/elasticsearch-search-api-reference.html
  */
-class ElasticsearchRequest extends Request
+class ElasticsearchSearchRequest extends Request
 {
 
     use Injectable;
