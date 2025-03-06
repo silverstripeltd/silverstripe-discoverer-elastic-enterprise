@@ -10,7 +10,7 @@ use SilverStripe\Discoverer\Service\Interfaces\SpellingSuggestionAdaptor as Spel
 use SilverStripe\Discoverer\Service\Results\Suggestions;
 use SilverStripe\DiscovererElasticEnterprise\Processors\SpellingParamsProcessor;
 use SilverStripe\DiscovererElasticEnterprise\Processors\SpellingProcessor;
-use SilverStripe\DiscovererElasticEnterprise\Service\Requests\ElasticsearchRequest;
+use SilverStripe\DiscovererElasticEnterprise\Service\Requests\ElasticsearchSearchRequest;
 use Throwable;
 
 class SpellingSuggestionAdaptor extends BaseAdaptor implements SpellingSuggestionAdaptorInterface
@@ -25,7 +25,7 @@ class SpellingSuggestionAdaptor extends BaseAdaptor implements SpellingSuggestio
         try {
             $engine = $this->environmentizeIndex($indexName);
             $params = SpellingParamsProcessor::singleton()->getQueryParams($suggestion);
-            $request = ElasticsearchRequest::create($engine, $params);
+            $request = ElasticsearchSearchRequest::create($engine, $params);
 
             $transportResponse = $this->getClient()->appSearch()->getTransport()->sendRequest($request->getRequest());
             $response = Injector::inst()->create(Response::class, $transportResponse);
