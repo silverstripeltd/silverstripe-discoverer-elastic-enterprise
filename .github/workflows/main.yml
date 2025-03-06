@@ -6,6 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  # allow passing .env vars to the test run
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+        - run: echo "ENTERPRISE_SEARCH_API_SEARCH_KEY=dummykey" >> .env
+        - uses: actions/cache/save@v4
+          with:
+            path: |
+                .env
+            key: 'env-1'
   ci:
     uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
     with:
