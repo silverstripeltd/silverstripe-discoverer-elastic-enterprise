@@ -229,6 +229,7 @@ class ResultsProcessor
 
                 foreach ($facetResult['data'] as $resultData) {
                     $facetData = FacetData::create();
+                    $facetData->setName($resultData['name'] ?? '');
                     $facetData->setValue($resultData['value'] ?? '');
                     $facetData->setFrom($resultData['from'] ?? '');
                     $facetData->setTo($resultData['to'] ?? '');
