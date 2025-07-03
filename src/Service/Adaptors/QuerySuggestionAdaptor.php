@@ -32,12 +32,16 @@ class QuerySuggestionAdaptor extends BaseAdaptor implements QuerySuggestionAdapt
             $suggestions->setSuccess(true);
         } catch (ClientErrorResponseException $e) {
             $errors = (string) $e->getResponse()->getBody();
+            // Set the error messages for this response to be used alongside the results object
+            if (method_exists($suggestions, 'setError')) {
+                $suggestions->setError($errors);
+            }
             // Log the error without breaking the page
-            $this->getLogger()->error(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
+            $this->getLogger()->warning(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
             // Our request was not a success
             $suggestions->setSuccess(false);
         } catch (Throwable $e) {
-            // Log the error without breaking the page
+            // Log the error and change response to a 500 error
             $this->getLogger()->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
             // Our request was not a success
             $suggestions->setSuccess(false);
