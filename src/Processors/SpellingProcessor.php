@@ -39,7 +39,7 @@ class SpellingProcessor
         $deduplicatedSuggestions = array_unique($deduplicatedSuggestions);
 
         foreach ($deduplicatedSuggestions as $suggestion) {
-            $suggestions->addSuggestion(Field::create($suggestion));
+            $suggestions->addSuggestion(Field::create($suggestion, $suggestion));
         }
     }
 

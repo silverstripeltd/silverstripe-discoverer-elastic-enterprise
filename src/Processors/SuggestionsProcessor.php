@@ -26,7 +26,7 @@ class SuggestionsProcessor
                 continue;
             }
 
-            $suggestions->addSuggestion(Field::create($suggestion));
+            $suggestions->addSuggestion(Field::create($suggestion, $suggestion));
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace SilverStripe\DiscovererElasticEnterprise\Tests\Processors;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Discoverer\Service\Results\Suggestions;
 use SilverStripe\DiscovererElasticEnterprise\Processors\SpellingProcessor;
@@ -10,12 +11,10 @@ use Throwable;
 class SpellingProcessorTest extends SapphireTest
 {
 
-    /**
-     * @dataProvider suggestionProvider
-     */
+    #[DataProvider('suggestionProvider')]
     public function testGetProcessedSuggestions(array $variation, array $expected, ?string $expectedError): void
     {
-        $suggestions = Suggestions::create();
+        $suggestions = Suggestions::create(200);
         $error = null;
 
         try {
@@ -26,18 +25,18 @@ class SpellingProcessorTest extends SapphireTest
 
         $suggestionOutput = [];
 
-        foreach ($suggestions as $suggestion) {
-            $suggestionOutput[]= $suggestion->getRaw();
+        foreach ($suggestions->getIterator() as $suggestion) {
+            $suggestionOutput[]= $suggestion->getFormatted();
         }
 
         $this->assertSame($expected, $suggestionOutput);
         $this->assertSame($expectedError, $error);
     }
 
-    public function suggestionProvider(): array
+    public static function suggestionProvider(): array
     {
         return [
-            [
+            'empty suggest' => [
                 [
                     'suggest' => [
                         'title' => [],
@@ -47,7 +46,7 @@ class SpellingProcessorTest extends SapphireTest
                 [],
                 null,
             ],
-            [
+            'single suggestion' => [
                 // suggestion
                 [
                     'suggest' => [
@@ -66,7 +65,7 @@ class SpellingProcessorTest extends SapphireTest
                 // expected error
                 null,
             ],
-            [
+            'duplicate suggestion' => [
                 // suggestion
                 [
                     'suggest' => [
@@ -91,7 +90,7 @@ class SpellingProcessorTest extends SapphireTest
                 // expected error
                 null,
             ],
-            [
+            'multiple suggestions' => [
                 // suggestion
                 [
                     'suggest' => [
@@ -116,10 +115,10 @@ class SpellingProcessorTest extends SapphireTest
                 // expected error
                 null,
             ],
-            [
+            'empty suggest field' => [
                 ['suggest' => []], [], 'Missing required top level fields for query suggestions: suggest',
             ],
-            [
+            'empty response' => [
                 [], [], 'Missing required top level fields for query suggestions: suggest',
             ],
         ];

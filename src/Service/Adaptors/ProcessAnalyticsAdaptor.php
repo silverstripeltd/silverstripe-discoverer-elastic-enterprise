@@ -17,7 +17,7 @@ class ProcessAnalyticsAdaptor extends BaseAdaptor implements ProcessAnalyticsAda
         $query = $analyticsData->getQueryString();
         $documentId = $analyticsData->getDocumentId();
         $requestId = $analyticsData->getRequestId();
-        $engineName = $analyticsData->getEngineName();
+        $indexName = $analyticsData->getIndexName();
 
         try {
             $params = Injector::inst()->create(ClickParams::class, $query, $documentId);
@@ -26,7 +26,7 @@ class ProcessAnalyticsAdaptor extends BaseAdaptor implements ProcessAnalyticsAda
                 $params->request_id = $requestId;
             }
 
-            $clickThrough = Injector::inst()->create(LogClickthrough::class, $engineName, $params);
+            $clickThrough = Injector::inst()->create(LogClickthrough::class, $indexName, $params);
             $this->getClient()->appSearch()->logClickthrough($clickThrough);
         } catch (Throwable $e) {
             // Log the error without breaking the page

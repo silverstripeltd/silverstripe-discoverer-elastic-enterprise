@@ -15,34 +15,36 @@ use Throwable;
 class QuerySuggestionAdaptor extends BaseAdaptor implements QuerySuggestionAdaptorInterface
 {
 
-    public function process(Suggestion $suggestion, string $indexName): Suggestions
+    /**
+     * This method will return an empty Suggestions object in case of an exception during communication with Elastic,
+     * to prevent the page from breaking.
+     */
+    public function process(Suggestion $suggestion, string $indexSuffix): Suggestions
     {
-        // Instantiate our Suggestions class with empty data. This will still be returned if there is an Exception
-        // during communication with Elastic (so that the page doesn't seriously break)
-        $suggestions = Suggestions::create();
-
         try {
-            $engine = $this->environmentizeIndex($indexName);
+            $engine = $this->environmentizeIndex($indexSuffix);
             $params = SuggestionParamsProcessor::singleton()->getQueryParams($suggestion);
             $request = Injector::inst()->create(QuerySuggestion::class, $engine, $params);
             $response = $this->getClient()->appSearch()->querySuggestion($request);
 
+            $suggestions = Suggestions::create(200);
             SuggestionsProcessor::singleton()->getProcessedSuggestions($suggestions, $response->asArray());
+
             // If we got this far, then the request was a success
-            $suggestions->setSuccess(true);
+            return $suggestions;
         } catch (ClientErrorResponseException $e) {
             $errors = (string) $e->getResponse()->getBody();
             // Log the error without breaking the page
             $this->getLogger()->error(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
+
             // Our request was not a success
-            $suggestions->setSuccess(false);
+            return Suggestions::create($e->getCode());
         } catch (Throwable $e) {
             // Log the error without breaking the page
             $this->getLogger()->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
+
             // Our request was not a success
-            $suggestions->setSuccess(false);
-        } finally {
-            return $suggestions;
+            return Suggestions::create($e->getCode());
         }
     }
 
