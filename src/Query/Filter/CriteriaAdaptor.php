@@ -14,7 +14,7 @@ use SilverStripe\Discoverer\Query\Filter\Criterion;
 class CriteriaAdaptor implements CriteriaAdaptorInterface
 {
 
-    private const NONE_COMPARISONS = [
+    private const array NONE_COMPARISONS = [
         Criterion::NOT_IN,
         Criterion::NOT_EQUAL,
     ];

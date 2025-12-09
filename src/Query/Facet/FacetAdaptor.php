@@ -10,15 +10,15 @@ use SilverStripe\Discoverer\Query\Facet\FacetCollection;
 class FacetAdaptor implements FacetAdaptorInterface
 {
 
-    public const TYPE_VALUE = 'value';
-    public const TYPE_RANGE = 'range';
+    public const string TYPE_VALUE = 'value';
+    public const string TYPE_RANGE = 'range';
 
-    private const TYPE_CONVERSION = [
+    private const array TYPE_CONVERSION = [
         Facet::TYPE_VALUE => self::TYPE_VALUE,
         Facet::TYPE_RANGE => self::TYPE_RANGE,
     ];
 
-    public function prepareFacets(FacetCollection $facetCollection): mixed
+    public function prepareFacets(FacetCollection $facetCollection): SimpleObject
     {
         $facets = new SimpleObject();
 

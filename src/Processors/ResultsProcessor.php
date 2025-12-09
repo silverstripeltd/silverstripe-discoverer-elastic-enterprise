@@ -86,9 +86,9 @@ class ResultsProcessor
             throw new Exception('Expected value for meta.request_id');
         }
 
-        $engineName = $meta['engine']['name'] ?? null;
+        $indexName = $meta['engine']['name'] ?? null;
 
-        if (!$engineName) {
+        if (!$indexName) {
             throw new Exception('Expected value for meta.engine.name');
         }
 
@@ -158,7 +158,7 @@ class ResultsProcessor
 
         // Only used if analytics are enabled
         $requestId = $response['meta']['request_id'] ?? null;
-        $engineName = $response['meta']['engine']['name'] ?? null;
+        $indexName = $response['meta']['engine']['name'] ?? null;
         // Check if any required fields are missing
         $missingRequiredFields = [];
 
@@ -166,7 +166,7 @@ class ResultsProcessor
             $missingRequiredFields[] = 'meta.request_id';
         }
 
-        if (!$engineName) {
+        if (!$indexName) {
             $missingRequiredFields[] = 'meta.engine.name';
         }
 
@@ -201,7 +201,7 @@ class ResultsProcessor
 
                 $analyticsData = AnalyticsData::create();
                 $analyticsData->setQueryString($queryString);
-                $analyticsData->setEngineName($engineName);
+                $analyticsData->setIndexName($indexName);
                 $analyticsData->setDocumentId($documentId);
                 $analyticsData->setRequestId($requestId);
 

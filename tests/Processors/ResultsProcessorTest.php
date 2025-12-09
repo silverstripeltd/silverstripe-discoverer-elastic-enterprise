@@ -169,7 +169,7 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create());
+        $results = Results::create(200, Query::create());
 
         // This should hydrate our Results object
         $reflectionMethod->invoke($resultsProcessor, $results, $this->getResponseWithRecords());
@@ -177,7 +177,7 @@ class ResultsProcessorTest extends SapphireTest
         $this->assertEquals(1, $results->getRecords()->CurrentPage());
         $this->assertEquals(10, $results->getRecords()->getPageLength());
         $this->assertEquals(10, $results->getRecords()->TotalPages());
-        $this->assertEquals(100, $results->getRecords()->TotalItems());
+        $this->assertEquals(100, $results->getRecords()->getTotalItems());
     }
 
     public function testProcessRecords(): void
@@ -191,12 +191,12 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create());
+        $results = Results::create(200, Query::create());
 
         // This should hydrate our Results object with 2 records
         $reflectionMethod->invoke($resultsProcessor, $results, $this->getResponseWithRecords(2));
 
-        $this->assertEquals(2, $results->getRecords()->TotalItems());
+        $this->assertEquals(2, $results->getRecords()->getTotalItems());
 
         /** @var Record $record */
         $record = $results->getRecords()->getList()->first();
@@ -257,12 +257,12 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create('query string'));
+        $results = Results::create(200, Query::create('query string'));
 
         // This should hydrate our Results object with 2 records
         $reflectionMethod->invoke($resultsProcessor, $results, $this->getResponseWithRecords(2));
 
-        $this->assertEquals(2, $results->getRecords()->TotalItems());
+        $this->assertEquals(2, $results->getRecords()->getTotalItems());
 
         /** @var Record $record */
         $record = $results->getRecords()->getList()->first();
@@ -271,7 +271,7 @@ class ResultsProcessorTest extends SapphireTest
         // Analytics is not turned on during this test
         $this->assertInstanceOf(AnalyticsData::class, $analyticsData);
         $this->assertEquals('query string', $analyticsData->getQueryString());
-        $this->assertEquals('elastic-main', $analyticsData->getEngineName());
+        $this->assertEquals('elastic-main', $analyticsData->getIndexName());
         $this->assertEquals('app_pages_blockpage_1', $analyticsData->getDocumentId());
         $this->assertEquals('123abc', $analyticsData->getRequestId());
     }
@@ -287,7 +287,7 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create());
+        $results = Results::create(200, Query::create());
 
         $response = $this->getResponseWithRecords();
         unset($response['meta']['request_id']);
@@ -306,7 +306,7 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create());
+        $results = Results::create(200, Query::create());
 
         $response = $this->getResponseWithRecords();
         unset($response['meta']['engine']['name']);
@@ -325,7 +325,7 @@ class ResultsProcessorTest extends SapphireTest
         $reflectionMethod->setAccessible(true);
 
         // Empty Results object
-        $results = Results::create(Query::create());
+        $results = Results::create(200, Query::create());
 
         $response = $this->getResponseWithRecords();
         unset($response['meta']['request_id']);

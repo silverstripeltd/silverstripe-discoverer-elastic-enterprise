@@ -2,6 +2,7 @@
 
 namespace SilverStripe\DiscovererElasticEnterprise\Tests\Query\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Discoverer\Query\Filter\Criterion;
@@ -11,9 +12,7 @@ use SilverStripe\DiscovererElasticEnterprise\Query\Filter\CriterionAdaptor;
 class CriterionAdaptorTest extends SapphireTest
 {
 
-    /**
-     * @dataProvider provideBasicComparisons
-     */
+    #[DataProvider('provideBasicComparisons')]
     public function testBasicComparison(string $comparison): void
     {
         $criterion = Criterion::create('fieldName', 'fieldValue', $comparison);
@@ -26,17 +25,15 @@ class CriterionAdaptorTest extends SapphireTest
         $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
-    public function provideBasicComparisons(): array
+    public static function provideBasicComparisons(): array
     {
         return [
-            [Criterion::EQUAL],
-            [Criterion::NOT_EQUAL],
+            'equal' => [Criterion::EQUAL],
+            'not_equal' => [Criterion::NOT_EQUAL],
         ];
     }
 
-    /**
-     * @dataProvider provideGreaterLessComparisons
-     */
+    #[DataProvider('provideGreaterLessComparisons')]
     public function testGreaterLessComparison(string $comparison, string $key): void
     {
         $date = '2024-01-01 01:02:03';
@@ -53,17 +50,15 @@ class CriterionAdaptorTest extends SapphireTest
         $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
-    public function provideGreaterLessComparisons(): array
+    public static function provideGreaterLessComparisons(): array
     {
         return [
-            [Criterion::GREATER_EQUAL, 'from'],
-            [Criterion::LESS_EQUAL, 'to'],
+            'greater_equal' => [Criterion::GREATER_EQUAL, 'from'],
+            'less_equal' => [Criterion::LESS_EQUAL, 'to'],
         ];
     }
 
-    /**
-     * @dataProvider provideUnsupportedComparisons
-     */
+    #[DataProvider('provideUnsupportedComparisons')]
     public function testUnsupportedComparison(string $comparison): void
     {
         $this->expectExceptionMessage(sprintf('Unsupported Elastic comparison "%s"', $comparison));
@@ -75,13 +70,13 @@ class CriterionAdaptorTest extends SapphireTest
         $adaptor->prepareCriterion($criterion);
     }
 
-    public function provideUnsupportedComparisons(): array
+    public static function provideUnsupportedComparisons(): array
     {
         return [
-            [Criterion::LESS_THAN],
-            [Criterion::GREATER_THAN],
-            [Criterion::IS_NULL],
-            [Criterion::IS_NOT_NULL],
+            'less_than' => [Criterion::LESS_THAN],
+            'greater_than' => [Criterion::GREATER_THAN],
+            'is_null' => [Criterion::IS_NULL],
+            'is_not_null' => [Criterion::IS_NOT_NULL],
         ];
     }
 
@@ -131,9 +126,7 @@ class CriterionAdaptorTest extends SapphireTest
         $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
-    /**
-     * @dataProvider provideInComparisons
-     */
+    #[DataProvider('provideInComparisons')]
     public function testValidInComparison(string $comparison): void
     {
         $range = [
@@ -150,11 +143,11 @@ class CriterionAdaptorTest extends SapphireTest
         $this->assertEquals($expected, $adaptor->prepareCriterion($criterion));
     }
 
-    public function provideInComparisons(): array
+    public static function provideInComparisons(): array
     {
         return [
-            [Criterion::IN],
-            [Criterion::NOT_IN],
+            'in' => [Criterion::IN],
+            'not_in' => [Criterion::NOT_IN],
         ];
     }
 

@@ -4,7 +4,6 @@ namespace SilverStripe\DiscovererElasticEnterprise\Service\Adaptors;
 
 use Elastic\EnterpriseSearch\AppSearch\Request\Search;
 use Elastic\EnterpriseSearch\Exception\ClientErrorResponseException;
-use Exception;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Discoverer\Query\Query;
 use SilverStripe\Discoverer\Service\Interfaces\SearchAdaptor as SearchAdaptorInterface;
@@ -17,36 +16,35 @@ class SearchAdaptor extends BaseAdaptor implements SearchAdaptorInterface
 {
 
     /**
-     * @throws Exception
+     * This method will return a Results object with empty data in case of an
+     * exception during communication with Elastic, to prevent the page from breaking.
      */
-    public function process(Query $query, string $indexName): Results
+    public function process(Query $query, string $indexSuffix): Results
     {
-        // Instantiate our Results class with empty data. This will still be returned if there is an Exception during
-        // communication with Elastic (so that the page doesn't seriously break)
-        $results = Results::create($query);
-
         try {
             $params = QueryParamsProcessor::singleton()->getQueryParams($query);
-            $engine = $this->environmentizeIndex($indexName);
+            $engine = $this->environmentizeIndex($indexSuffix);
             $request = Injector::inst()->create(Search::class, $engine, $params);
             $response = $this->getClient()->appSearch()->search($request);
 
+            $results = Results::create(200, $query);
             ResultsProcessor::singleton()->getProcessedResults($results, $response->asArray());
+
             // If we got this far, then the request was a success
-            $results->setSuccess(true);
+            return $results;
         } catch (ClientErrorResponseException $e) {
             $errors = (string) $e->getResponse()->getBody();
             // Log the error without breaking the page
             $this->getLogger()->error(sprintf('Elastic error: %s', $errors), ['elastic' => $e]);
+
             // Our request was not a success
-            $results->setSuccess(false);
+            return Results::create($e->getCode(), $query);
         } catch (Throwable $e) {
             // Log the error without breaking the page
             $this->getLogger()->error(sprintf('Elastic error: %s', $e->getMessage()), ['elastic' => $e]);
+
             // Our request was not a success
-            $results->setSuccess(false);
-        } finally {
-            return $results;
+            return Results::create($e->getCode(), $query);
         }
     }
 

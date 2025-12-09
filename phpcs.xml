@@ -5,6 +5,8 @@
     <file>src</file>
     <file>tests</file>
 
+    <!-- Don't sniff test classes, because they include PHP attributes that cause Slevomat to throw errors -->
+    <exclude-pattern>./tests/*</exclude-pattern>
     <!-- Don't sniff third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>
     <exclude-pattern>*/thirdparty/*</exclude-pattern>
@@ -151,15 +153,22 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
         <properties>
             <property name="searchAnnotations" type="bool" value="true"/>
-            <property name="ignoredAnnotationNames" type="array" value="@config"/>
+            <property name="ignoredAnnotationNames" type="array">
+                <element value="@config"/>
+            </property>
         </properties>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
         <properties>
             <!-- Set the root namespace for our src dir and phpunit dir. Please change these as required -->
-            <property name="rootNamespaces" type="array" value="src=>SilverStripe\DiscovererElasticEnterprise,tests=>SilverStripe\DiscovererElasticEnterprise\Tests"/>
-            <property name="ignoredNamespaces" type="array" value="Slevomat\Services"/>
+            <property name="rootNamespaces" type="array">
+                <element key="src" value="SilverStripe\DiscovererElasticEnterprise"/>
+                <element key="tests" value="SilverStripe\DiscovererElasticEnterprise\Tests"/>
+            </property>
+            <property name="ignoredNamespaces" type="array">
+                <element value="Slevomat\Services"/>
+            </property>
         </properties>
     </rule>
 

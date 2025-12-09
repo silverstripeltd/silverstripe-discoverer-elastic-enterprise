@@ -16,10 +16,10 @@ class ElasticsearchSearchRequest extends Request
 
     use Injectable;
 
-    public function __construct(string $engineName, EsSearchParams $params)
+    public function __construct(string $indexName, EsSearchParams $params)
     {
         $this->method = 'POST';
-        $engine_name = urlencode($engineName);
+        $engine_name = urlencode($indexName);
         $this->path = '/api/as/v1/engines/' . $engine_name . '/elasticsearch/_search';
         $this->headers['Content-Type'] = 'application/json';
         $this->body = $params;
